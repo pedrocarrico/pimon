@@ -1,0 +1,68 @@
+%script{ :src => 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js' }
+%script{ :src => 'http://code.highcharts.com/highcharts.js' }
+
+#graph
+
+:javascript
+  $(function () {
+    var chart;
+    $(document).ready(function() {
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'graph',
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: 'CPU Usage',
+                x: -20
+            },
+            subtitle: {
+                text: 'My raspberry PI',
+                x: -20
+            },
+            xAxis: {
+                categories: #{@time}
+            },
+            yAxis: {
+                title: {
+                    text: 'Usage percentage'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }],
+                max: 100,
+                min: 0
+            },
+            tooltip: {
+                formatter: function() {
+                        return '<b>'+ this.series.name +'</b><br/>'+
+                        this.x +': '+ this.y +'%';
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [{
+                name: 'usr',
+                data: #{@usr}
+            },
+            {
+                name: 'sys',
+                data: #{@sys}
+            },
+            {
+                name: 'idl',
+                data: #{@idl}
+            }]
+        });
+    });
+  });
