@@ -9,16 +9,20 @@ class StatsChecker
   end
 
   def check_stats
-    dstat = `dstat -cms -C total --integer --noupdate 1 1`.split(/\n/)
+    vmstat = `vmstat 1 2`.split(/\n/)
+    mem = `free -o -m`.split(/\n/)
 
-    # the second update of dstat is much more accurate
-    usr, sys, idl, wai, hiq, siq, used, buff, cach, free, swap_used, swap_free = dstat[3].gsub('|',' ').split(" ").map(&:to_i)
-    
-    mem_used   = used + buff + cach
-    mem_total  = mem_used + free
-    swap_total = swap_used + swap_free
+    cpu_idle = vmstat[3].split(" ")[14].to_i
 
-    [ 100 - idl , ((mem_used.to_f / mem_total) * 100).to_i, ((swap_used.to_f / swap_total) * 100).to_i ]
+    ram = mem[1].split(" ")
+    swap = mem[2].split(" ")
+
+    mem_total  = ram[1].to_i
+    mem_used   = ram[2].to_i
+    swap_total = swap[1].to_i
+    swap_used  = swap[2].to_i
+
+    [ 100 - cpu_idle , ((mem_used.to_f / mem_total) * 100).to_i, ((swap_used.to_f / swap_total) * 100).to_i ]
   end
 
   def run
