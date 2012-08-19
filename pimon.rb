@@ -1,27 +1,45 @@
 require 'haml'
+require "#{File.dirname(__FILE__)}/lib/queues"
 require 'sinatra'
 require 'redis'
+require 'yaml'
 
-set :public_folder, 'public'
-set :redis, Redis.new(:path => '/tmp/redis.sock')
+configure do
+  config = YAML.load_file('config.yml')
 
-TIME_QUEUE = 'pimon_time'
-
-CPU_USR_QUEUE = 'pimon_cpu_usr'
-CPU_SYS_QUEUE = 'pimon_cpu_sys'
-CPU_IDL_QUEUE = 'pimon_cpu_idl'
-
-get '/' do
-  @time, @usr, @sys, @idl = settings.redis.pipelined do
-    settings.redis.lrange(TIME_QUEUE, 0, -1)
-    settings.redis.lrange(CPU_USR_QUEUE, 0, -1)
-    settings.redis.lrange(CPU_SYS_QUEUE, 0, -1)
-    settings.redis.lrange(CPU_IDL_QUEUE, 0, -1)
+  if config['basic_auth']['enabled']
+    use Rack::Auth::Basic, "Restricted Area" do |username, password|
+      [username, password] == [config['basic_auth']['username'], config['basic_auth']['password']]
+    end
   end
 
-  @usr = @usr.reduce([]){ |acc, value| acc << value.to_i}
-  @sys = @sys.reduce([]){ |acc, value| acc << value.to_i}
-  @idl = @idl.reduce([]){ |acc, value| acc << value.to_i}
+  set :public_folder, 'public'
+  set :redis, Redis.new(:path => config['redis']['socket'])
+end
+
+
+
+get '/' do
+  @time, @cpu, @mem, @swap = settings.redis.pipelined do
+    settings.redis.lrange(Queues::TIME, 0, -1)
+    settings.redis.lrange(Queues::CPU,  0, -1)
+    settings.redis.lrange(Queues::MEM,  0, -1)
+    settings.redis.lrange(Queues::SWAP, 0, -1)
+  end
+
+  @cpu  = @cpu.reduce([]){ |acc, value| acc << value.to_i}
+  @mem  = @mem.reduce([]){ |acc, value| acc << value.to_i}
+  @swap = @swap.reduce([]){ |acc, value| acc << value.to_i}
 
   haml :index
+end
+
+
+private
+
+def read_config
+  
+
+
+
 end

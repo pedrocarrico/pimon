@@ -1,3 +1,3 @@
-# Coming soon..
+# Pimon
 
-This is a simple server stats monitor designed for the raspberry pi.
+A simple server stats monitor designed for the raspberry pi.

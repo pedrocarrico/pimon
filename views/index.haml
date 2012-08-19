@@ -15,7 +15,7 @@
                 marginBottom: 25
             },
             title: {
-                text: 'CPU Usage',
+                text: 'Usage',
                 x: -20
             },
             subtitle: {
@@ -52,17 +52,18 @@
                 borderWidth: 0
             },
             series: [{
-                name: 'usr',
-                data: #{@usr}
+                name: 'cpu',
+                data: #{@cpu}
             },
             {
-                name: 'sys',
-                data: #{@sys}
+                name: 'mem',
+                data: #{@mem}
             },
             {
-                name: 'idl',
-                data: #{@idl}
+                name: 'swap',
+                data: #{@swap}
             }]
+
         });
     });
   });

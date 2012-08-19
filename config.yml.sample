@@ -1,0 +1,7 @@
+basic_auth:
+  enabled: true
+  username: pimon
+  password: pimon
+redis:
+  socket: /tmp/redis.sock
+
