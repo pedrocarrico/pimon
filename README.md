@@ -20,6 +20,15 @@ highcharts to display some nice graphs on your web browser.
 1. basic_auth - enable or disable, configure username and password
 2. redis - configure the location of the redis socket
 
+## Quirks
+Pimon uses _vmstat_ and _free_ to collect it's stats from the operating system and these are only
+available on operating systems that have the /proc filesystem.  
+So if you want to develop on a Mac you may use the mock implementations that are in the bin directory.  
+The mock implementations are programmed in C and mimic the output of _vmstat_ and _free_.  
+They just change and generate some random values on the observed stats using /dev/urandom.  
+To use them you must first compile them using _make_ and then include the bin directory of this project
+in your $PATH to have them available when you run the stats checker.
+
 ## TODO
 1. More configuration options
 2. Have a If-Modified-Since/Last-Modified request/response HTTP header
