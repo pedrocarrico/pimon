@@ -1,3 +1,4 @@
+require 'date'
 require 'haml'
 require "#{File.dirname(__FILE__)}/lib/queues"
 require 'sinatra'
@@ -18,6 +19,9 @@ configure do
 end
 
 get '/' do
+  last_update = settings.redis.lindex(Queues::TIME, 5)
+  last_modified(DateTime.parse(last_update))
+  
   @time, @cpu, @mem, @swap = settings.redis.pipelined do
     settings.redis.lrange(Queues::TIME, 0, -1)
     settings.redis.lrange(Queues::CPU,  0, -1)
@@ -25,6 +29,7 @@ get '/' do
     settings.redis.lrange(Queues::SWAP, 0, -1)
   end
   
+  @time = @time.reduce([]){ |acc, value| acc << (/\d\d:\d\d:\d\d/.match(value))[0]}
   @cpu  = @cpu.reduce([]){ |acc, value| acc << value.to_i}
   @mem  = @mem.reduce([]){ |acc, value| acc << value.to_i}
   @swap = @swap.reduce([]){ |acc, value| acc << value.to_i}

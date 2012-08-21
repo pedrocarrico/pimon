@@ -36,7 +36,7 @@ class StatsChecker
 
       cpu_usage, mem_usage, swap_usage = check_stats
 
-      @redis.rpush(Queues::TIME, Time.now.strftime("%H:%M:%S"))
+      @redis.rpush(Queues::TIME, Time.now.strftime("%Y-%m-%d %H:%M:%S"))
       @redis.rpush(Queues::CPU, cpu_usage)
       @redis.rpush(Queues::MEM, mem_usage)
       @redis.rpush(Queues::SWAP, swap_usage)
@@ -50,7 +50,7 @@ class StatsChecker
 
     while queue_size < @number_of_checks
       @redis.pipelined do
-        @redis.rpush(Queues::TIME, Time.now.strftime("%H:%M:%S"))
+        @redis.rpush(Queues::TIME, Time.now.strftime("%Y-%m-%d %H:%M:%S"))
         @redis.lpush(Queues::CPU,  0)
         @redis.lpush(Queues::MEM,  0)
         @redis.lpush(Queues::SWAP, 0)
