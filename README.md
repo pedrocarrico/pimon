@@ -31,8 +31,8 @@ in your $PATH to have them available when you run the stats checker.
 
 ## TODO
 1. More configuration options
-2. Have a If-Modified-Since/Last-Modified request/response HTTP header
-3. More control over the time slices
+2. More control over the time slices
+3. Disk stats
 
 ## Copyright
 Licensed under the [WTFPL](http://en.wikipedia.org/wiki/WTFPL "Do What The Fuck You Want To Public License") license.
