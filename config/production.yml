@@ -1,6 +1,6 @@
 basic_auth:
   enabled: true
-  username: pimon
-  password: pimon
+  username: changed_on_deploy
+  password: changed_on_deploy
 redis:
   socket: /tmp/redis.sock
