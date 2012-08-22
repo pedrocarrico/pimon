@@ -1,0 +1,13 @@
+environment: production
+chdir: /home/pi/app/pimon/current
+address: 127.0.0.1
+user: pi
+group: pi
+port: 4567
+pid: /home/pi/app/pimon/shared/pids/thin.pid
+rackup: /home/pi/app/pimon/current/config/config.ru
+log: /home/pi/app/pimon/shared/log/thin.log
+max_conns: 1024
+timeout: 30
+max_persistent_conns: 512
+daemonize: true

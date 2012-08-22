@@ -1,5 +1,6 @@
-config.yml
 sandbox.sh
 bin/free
 bin/vmstat
 bin/*.o
+log/*
+config/thin/development_config.yml

@@ -6,7 +6,7 @@ require 'redis'
 require 'yaml'
 
 configure do
-  config = YAML.load_file('config.yml')
+  config = YAML.load_file("#{File.dirname(__FILE__)}/config/#{ENV['RACK_ENV'] || "development"}.yml")
   
   if config['basic_auth']['enabled']
     use Rack::Auth::Basic, "Restricted Area" do |username, password|
@@ -20,7 +20,7 @@ end
 
 get '/' do
   last_update = settings.redis.lindex(Queues::TIME, 5)
-  last_modified(DateTime.parse(last_update))
+  last_modified(DateTime.parse(last_update)) if last_update
   
   @time, @cpu, @mem, @swap = settings.redis.pipelined do
     settings.redis.lrange(Queues::TIME, 0, -1)

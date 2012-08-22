@@ -1,7 +1,21 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    capistrano (2.13.3)
+      highline
+      net-scp (>= 1.0.0)
+      net-sftp (>= 2.0.0)
+      net-ssh (>= 2.0.14)
+      net-ssh-gateway (>= 1.1.0)
     haml (3.1.7)
+    highline (1.6.13)
+    net-scp (1.0.4)
+      net-ssh (>= 1.99.1)
+    net-sftp (2.0.5)
+      net-ssh (>= 2.0.9)
+    net-ssh (2.5.2)
+    net-ssh-gateway (1.1.0)
+      net-ssh (>= 1.99.1)
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
@@ -16,6 +30,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  capistrano
   haml
   redis
   sinatra
