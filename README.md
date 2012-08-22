@@ -16,9 +16,26 @@ highcharts to display some nice graphs on your web browser.
 6. go to http://localhost:4567 and PROFIT!
 7. You may want to put "ruby stats_checker.rb" in your crontab to collect some stats over time
 
-## Configuration (config.yml)
+## Configuration
 1. basic_auth - enable or disable, configure username and password
 2. redis - configure the location of the redis socket
+
+## Deployment
+To deploy on your raspberry pi you just have to have ssh enabled and your keys authorized.  
+Then you can deploy with capistrano using:  
+```
+cap deploy:setup
+cap deploy:cold
+```
+
+This will setup your raspberry pi and deploy the application.  
+The username and password for the basic_auth in the production environment will be asked in the
+first deploy.
+To start and stop the application you have the usual:  
+```
+cap deploy:start
+cap deploy:stop
+```
 
 ## Quirks
 Pimon uses _vmstat_ and _free_ to collect it's stats from the operating system and these are only
@@ -33,6 +50,8 @@ in your $PATH to have them available when you run the stats checker.
 1. More configuration options
 2. More control over the time slices
 3. Disk stats
+4. Capistrano task to reset production basic_auth username and password
+5. Show uptime
 
 ## Copyright
 Licensed under the [WTFPL](http://en.wikipedia.org/wiki/WTFPL "Do What The Fuck You Want To Public License") license.
