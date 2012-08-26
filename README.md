@@ -1,5 +1,7 @@
 # Pimon
 
+[![Build Status](https://secure.travis-ci.org/pedrocarrico/pimon.png)](http://travis-ci.org/pedrocarrico/pimon)
+
 ![Pimon](http://pedrocarrico.net/pimon.jpg "Pimon")
 
 ## Description

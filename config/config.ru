@@ -8,4 +8,4 @@ set :root,  root_dir
 set :app_file, File.join(root_dir, 'pimon.rb')
 disable :run
 
-run Sinatra::Application
+run Pimon

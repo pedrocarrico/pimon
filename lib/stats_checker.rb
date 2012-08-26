@@ -1,3 +1,5 @@
+require 'bundler/setup'
+
 require 'redis'
 require "#{File.dirname(__FILE__)}/queues"
 
@@ -9,13 +11,10 @@ class StatsChecker
   end
 
   def check_stats
-    vmstat = `vmstat 1 2`.split(/\n/)
-    mem = `free -o -m`.split(/\n/)
-
     cpu_idle = vmstat[3].split(" ")[14].to_i
 
-    ram = mem[1].split(" ")
-    swap = mem[2].split(" ")
+    ram = free[1].split(" ")
+    swap = free[2].split(" ")
 
     mem_total  = ram[1].to_i
     mem_used   = ram[2].to_i
@@ -45,6 +44,14 @@ class StatsChecker
 
   private
   
+  def vmstat
+    @vmstate ||= `vmstat 1 2`.split(/\n/)
+  end
+
+  def free
+    @free ||= `free -o -m`.split(/\n/)
+  end
+
   def fill_up_queue
     queue_size = @redis.llen(Queues::TIME)
 

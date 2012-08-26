@@ -1,0 +1,6 @@
+rvm:
+  - 1.9.3
+script: "rake spec"
+notifications:
+    email:
+        - pedro.carrico@gmail.com
