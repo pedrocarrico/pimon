@@ -13,10 +13,11 @@ highcharts to display some nice graphs on your web browser.
 1. Install redis
 2. Copy the supplied config.yml.sample to config.yml
 3. bundle
-4. ruby pimon.rb # run the sinatra app
-5. ruby stats_checker.rb # collect some stats
-6. go to http://localhost:4567 and PROFIT!
-7. You may want to put "ruby stats_checker.rb" in your crontab to collect some stats over time
+4. Use the supplied development config template in the config directory and make your own development config.yml
+5. ./dev_server.sh # run the sinatra app
+6. ruby stats_checker.rb # collect some stats
+7. go to http://localhost:4567 and PROFIT!
+8. You may want to put "ruby stats_checker.rb" in your crontab to collect some stats over time
 
 ## Configuration
 1. basic_auth - enable or disable, configure username and password
