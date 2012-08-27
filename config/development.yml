@@ -2,3 +2,13 @@ basic_auth:
   enabled: false
 redis:
   socket: /tmp/redis.sock
+chart:
+  cpu:
+    color: '#D2691E'
+  mem:
+    color: '#87CEFA'
+  swap:
+    color: '#3CB371'
+stats:
+  slices: 6
+  time_period_in_min: 10

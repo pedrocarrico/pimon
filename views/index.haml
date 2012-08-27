@@ -1,69 +1,104 @@
-%script{ :src => 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js' }
-%script{ :src => 'http://code.highcharts.com/highcharts.js' }
-
-#graph
-
-:javascript
-  $(function () {
-    var chart;
-    $(document).ready(function() {
-        chart = new Highcharts.Chart({
-            chart: {
-                renderTo: 'graph',
-                type: 'line',
-                marginRight: 130,
-                marginBottom: 25
-            },
-            title: {
-                text: 'Pimon',
-                x: -20
-            },
-            subtitle: {
-                text: 'My raspberry PI',
-                x: -20
-            },
-            xAxis: {
-                categories: #{@time}
-            },
-            yAxis: {
-                title: {
-                    text: 'Usage percentage'
+%html
+  %header
+    %title Pimon
+    %script{ :src => '//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery-1.8.0.min.js' }
+    %script{ :src => '//cdnjs.cloudflare.com/ajax/libs/highcharts/2.2.5/highcharts.js' }
+    %script{ :src => '//lipka.github.com/piecon/piecon.min.js' }
+  %body
+    #chart
+    
+    :javascript
+      $(function () {
+        var chart;
+        $(document).ready(function() {
+            chart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'chart',
+                    type: 'line',
+                    marginRight: 130,
+                    marginBottom: 25
                 },
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                }],
-                max: 100,
-                min: 0
-            },
-            tooltip: {
-                formatter: function() {
-                        return '<b>'+ this.series.name +'</b><br/>'+
-                        this.x +': '+ this.y +'%';
-                }
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'top',
-                x: -10,
-                y: 100,
-                borderWidth: 0
-            },
-            series: [{
-                name: 'cpu',
-                data: #{@cpu}
-            },
-            {
-                name: 'mem',
-                data: #{@mem}
-            },
-            {
-                name: 'swap',
-                data: #{@swap}
-            }]
-
+                title: {
+                    text: 'Pimon',
+                    x: -20
+                },
+                subtitle: {
+                    text: 'My raspberry PI',
+                    x: -20
+                },
+                xAxis: {
+                    categories: #{@o[:time][:stats]}
+                },
+                yAxis: {
+                    title: {
+                        text: 'Usage percentage'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }],
+                    max: 100,
+                    min: 0
+                },
+                tooltip: {
+                    formatter: function() {
+                            return '<b>'+ this.series.name +'</b><br/>'+
+                            this.x +': '+ this.y +'%';
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -10,
+                    y: 100,
+                    borderWidth: 0
+                },
+                series: [{
+                    name: 'cpu',
+                    color: '#{@o[:cpu][:color]}',
+                    data: #{@o[:cpu][:stats]}
+                },
+                {
+                    name: 'mem',
+                    color: '#{@o[:mem][:color]}',
+                    data: #{@o[:mem][:stats]}
+                },
+                {
+                    name: 'swap',
+                    color: '#{@o[:swap][:color]}',
+                    data: #{@o[:swap][:stats]}
+                }]
+                
+            });
         });
-    });
-  });
+        
+        
+        var cpu = #{@o[:cpu][:stats]},
+            mem = #{@o[:mem][:stats]},
+            swap = #{@o[:swap][:stats]},
+            titleStats = [ { 'legend' : 'CPU', 'stat' : cpu[cpu.length - 1], 'color' : '#{@o[:cpu][:color]}' } ,
+                           { 'legend' : 'MEM', 'stat' : mem[mem.length - 1], 'color' : '#{@o[:mem][:color]}' } ,
+                           { 'legend' : 'SWAP', 'stat' : swap[swap.length - 1], 'color' : '#{@o[:swap][:color]}'} ],
+            i = 0;
+        
+        function changeFavicon() {
+          Piecon.setOptions({
+            color: titleStats[i]['color'], // Pie chart color
+            background: '#bbb', // Empty pie chart color
+            shadow: '#fff', // Outer ring color
+            fallback: 'force' // Toggles displaying percentage in the title bar (possible values - true, false, 'force')
+          });
+          Piecon.setProgress(titleStats[i]['stat']);
+          
+          $('title').text(titleStats[i]['stat'] + '% ' + titleStats[i]['legend'])
+          i++;
+          if (i >= titleStats.length) {
+            i = 0;
+          } 
+        }
+        
+        setInterval(changeFavicon, 3000);
+        changeFavicon();
+      });
