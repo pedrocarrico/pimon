@@ -5,7 +5,7 @@ set :scm, :git
 
 set :repository, "git://github.com/pedrocarrico/pimon.git"
 
-set :deploy_to, "/home/pi/app/pimon"
+set :deploy_to, '/home/pi/app/pimon'
 set :deploy_via, :remote_cache # quicker checkouts from github
 
 set :domain, 'raspberrypi'
@@ -15,9 +15,10 @@ role :web, domain
 set :runner, user
 set :use_sudo, false
 
+after 'deploy', 'deploy:bundle_install'
+
 namespace :deploy do
   task :start, :roles => [:web, :app] do
-    deploy.check_basic_auth
     run "cd #{deploy_to}/current && nohup thin -C config/thin/config.yml -R config/config.ru start"
   end
   
@@ -55,5 +56,10 @@ namespace :deploy do
       run "cp #{shared_config} #{deploy_to}/current/config/production.yml"
       puts "DONE"
     end
+  end
+  
+  desc "run 'bundle install' to install Bundler's packaged gems for the current deploy"
+  task :bundle_install, :roles => :app do
+    run "cd #{deploy_to}/current && bundle install --without test"
   end
 end
