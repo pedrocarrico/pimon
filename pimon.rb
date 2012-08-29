@@ -1,69 +1,50 @@
 require 'bundler/setup'
 
-require 'date'
+require 'active_support/core_ext/hash/indifferent_access'
 require 'haml'
-require "#{File.dirname(__FILE__)}/lib/queues"
+require "#{File.dirname(__FILE__)}/lib/pimon_config"
+require "#{File.dirname(__FILE__)}/lib/stats_collector"
 require 'sinatra'
-require 'redis'
-require 'yaml'
 
 class Pimon < Sinatra::Base
-
   configure :development, :production do
-    config = YAML.load_file("#{File.dirname(__FILE__)}/config/#{ENV['RACK_ENV'] || "development"}.yml")
+    require 'redis'
+    config = PimonConfig.create_new(ENV['RACK_ENV'])
     
-    if config['basic_auth']['enabled']
+    if config.is_basic_auth_enabled?
       use Rack::Auth::Basic, "Restricted Area" do |username, password|
-        [username, password] == [config['basic_auth']['username'], config['basic_auth']['password']]
+        [username, password] == config.basic_auth
       end
     end
     
     set :public_folder, 'public'
-    set :redis, Redis.new(:path => config['redis']['socket'])
     set :config, config
+    set :stats_checker, StatsCollector.new(config, Redis.new(:path => config.redis['socket']))
   end
   
   configure :test do
     require 'mock_redis'
     
-    config = YAML.load_file("#{File.dirname(__FILE__)}/config/test.yml")
+    config = PimonConfig.create_new('test')
     
-    if config['basic_auth']['enabled']
+    if config.is_basic_auth_enabled?
       use Rack::Auth::Basic, "Restricted Area" do |username, password|
-        [username, password] == [config['basic_auth']['username'], config['basic_auth']['password']]
+        [username, password] == config.basic_auth
       end
     end
     set :public_folder, 'public'
-    set :redis, MockRedis.new
     set :config, config
+    set :stats_checker, StatsCollector.new(config, MockRedis.new)
   end
   
   get '/' do
-    last_update = settings.redis.lindex(Queues::TIME, 5)
-    last_modified(DateTime.parse(last_update)) if ENV['RACK_ENV'] != 'development' && last_update
+    last_update = settings.stats_checker.last_update
+    last_modified(last_update) if ENV['RACK_ENV'] != 'development' && last_update
     
-    @o = {}
-    
-    @o[:time] = {}
-    @o[:cpu] = {}
-    @o[:mem] = {}
-    @o[:swap] = {}
-    
-    @o[:cpu][:color] = settings.config['chart']['cpu']['color']
-    @o[:mem][:color] = settings.config['chart']['mem']['color']
-    @o[:swap][:color] = settings.config['chart']['swap']['color']
-    
-    @o[:time][:stats], @o[:cpu][:stats], @o[:mem][:stats], @o[:swap][:stats] = settings.redis.pipelined do
-      settings.redis.lrange(Queues::TIME, 0, -1)
-      settings.redis.lrange(Queues::CPU,  0, -1)
-      settings.redis.lrange(Queues::MEM,  0, -1)
-      settings.redis.lrange(Queues::SWAP, 0, -1)
-    end
-    
-    @o[:time][:stats] = @o[:time][:stats].reduce([]){ |acc, value| acc << (/\d\d:\d\d:\d\d/.match(value))[0]}
-    @o[:cpu][:stats]  = @o[:cpu][:stats].reduce([]){ |acc, value| acc << value.to_i}
-    @o[:mem][:stats]  = @o[:mem][:stats].reduce([]){ |acc, value| acc << value.to_i}
-    @o[:swap][:stats] = @o[:swap][:stats].reduce([]){ |acc, value| acc << value.to_i}
+    @o = HashWithIndifferentAccess.new
+    @o[:time] = HashWithIndifferentAccess.new
+    @o.merge!(settings.config.chart)
+    @o[:time][:stats], @o[:cpu][:stats], @o[:mem][:stats], @o[:swap][:stats] = settings.stats_checker.show_stats
     
     haml :index
   end

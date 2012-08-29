@@ -1,6 +1,8 @@
-sandbox.sh
+.rspec
 bin/free
 bin/vmstat
 bin/*.o
-log/*
 config/thin/development_config.yml
+coverage
+log/*
+sandbox.sh

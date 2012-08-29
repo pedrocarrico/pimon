@@ -15,7 +15,7 @@ role :web, domain
 set :runner, user
 set :use_sudo, false
 
-after 'deploy', 'deploy:bundle_install'
+after 'deploy:update_code', 'deploy:bundle_install'
 
 namespace :deploy do
   task :start, :roles => [:web, :app] do

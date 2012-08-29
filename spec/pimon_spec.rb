@@ -1,8 +1,20 @@
 require 'spec_helper'
-require 'pry'
+
+# setup test environment
+set :environment, :test
+set :run, false
+set :raise_errors, true
+set :logging, false
+
+def app
+  Pimon
+end
+
+RSpec.configure do |config|
+  config.include Rack::Test::Methods
+end
 
 describe "Pimon" do
-  
   context "when not authenticated" do
     
     it "should be not authorized" do
@@ -15,24 +27,9 @@ describe "Pimon" do
     before { authorize 'pimon', 'pimon' }
     
     it "should be success" do
-      fill_up_queues
-
+      
       get '/'
       last_response.should be_ok
     end
-  end
-  
-  private
-  
-  def fill_up_queues
-    queue_size = Pimon.settings.redis.llen(Queues::TIME)
-    @number_of_checks = 6
-    while queue_size < @number_of_checks
-      Pimon.settings.redis.rpush(Queues::TIME, Time.now.strftime("%Y-%m-%d %H:%M:%S"))
-      Pimon.settings.redis.lpush(Queues::CPU,  0)
-      Pimon.settings.redis.lpush(Queues::MEM,  0)
-      Pimon.settings.redis.lpush(Queues::SWAP, 0)
-      queue_size += 1
-    end    
   end
 end

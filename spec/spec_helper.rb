@@ -2,21 +2,20 @@
 # Check http://richardconroy.blogspot.pt/2010/01/issues-testing-sinatra-datamapper-app.html
 ENV['RACK_ENV'] = 'test'
 
+if ENV['COVERAGE']
+  require 'simplecov'
+  require 'simplecov-rcov'
+  class SimpleCov::Formatter::MergedFormatter
+    def format(result)
+      SimpleCov::Formatter::HTMLFormatter.new.format(result)
+      SimpleCov::Formatter::RcovFormatter.new.format(result)
+    end
+  end
+  SimpleCov.formatter = SimpleCov::Formatter::MergedFormatter
+  SimpleCov.start
+end
+
 require File.join(File.dirname(__FILE__), '..', 'pimon.rb')
 
 require 'sinatra'
 require 'rack/test'
-
-# setup test environment
-set :environment, :test
-set :run, false
-set :raise_errors, true
-set :logging, false
-
-def app
-  Pimon
-end
-
-RSpec.configure do |config|
-  config.include Rack::Test::Methods
-end
