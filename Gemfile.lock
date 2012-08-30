@@ -1,9 +1,6 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (3.2.7)
-      i18n (~> 0.6)
-      multi_json (~> 1.0)
     capistrano (2.13.3)
       highline
       net-scp (>= 1.0.0)
@@ -16,7 +13,6 @@ GEM
     eventmachine (0.12.10)
     haml (3.1.7)
     highline (1.6.13)
-    i18n (0.6.0)
     method_source (0.8)
     mock_redis (0.5.0)
     multi_json (1.0.4)
@@ -66,7 +62,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport
   capistrano
   haml
   mock_redis (~> 0.5.0)

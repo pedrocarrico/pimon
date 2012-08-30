@@ -1,4 +1,4 @@
-require 'active_support/core_ext/hash/indifferent_access'
+require_relative 'hash_extensions'
 require 'yaml'
 
 class PimonConfig
@@ -55,7 +55,7 @@ class PimonConfig
   def initialize(environment)
     begin
       filename = "#{File.dirname(__FILE__)}/../config/#{ environment || 'development' }.yml"
-      @config = YAML.load_file(filename).with_indifferent_access
+      @config = YAML.load_file(filename).symbolize_keys
       @config.merge!({ :environment => "#{ environment || 'development'}"})
       @config.freeze
     rescue Exception => e

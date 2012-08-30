@@ -1,6 +1,5 @@
 source :rubygems
 
-gem 'activesupport'
 gem 'capistrano'
 gem 'haml'
 gem 'redis'
