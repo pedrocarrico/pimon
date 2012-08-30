@@ -12,7 +12,9 @@ if ENV['COVERAGE']
     end
   end
   SimpleCov.formatter = SimpleCov::Formatter::MergedFormatter
-  SimpleCov.start
+  SimpleCov.start do
+    add_filter 'spec'
+  end
 end
 
 require File.join(File.dirname(__FILE__), '..', 'pimon.rb')
