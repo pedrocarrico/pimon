@@ -60,6 +60,6 @@ namespace :deploy do
   
   desc "run 'bundle install' to install Bundler's packaged gems for the current deploy"
   task :bundle_install, :roles => :app do
-    run "cd #{deploy_to}/current && bundle install --without test"
+    run "cd #{deploy_to}/current && bundle install --without test development"
   end
 end
