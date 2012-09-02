@@ -9,14 +9,10 @@ class PimonConfig
   end
   
   def basic_auth
-    if is_basic_auth_enabled?
-      if has_authentication_details?
-        [@config[:basic_auth][:username], @config[:basic_auth][:password]]
-      else
-        raise "There's an error on your config: Basic auth is enabled without a username/password"
-      end
+    if is_basic_auth_enabled? && has_authentication_details?
+      [@config[:basic_auth][:username], @config[:basic_auth][:password]]
     else
-      raise "Basic auth is not enabled"
+      nil
     end
   end
   

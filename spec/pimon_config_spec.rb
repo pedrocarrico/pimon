@@ -19,4 +19,16 @@ describe 'PimonConfig' do
     its(:stats) { should == { :slices => 6, :time_period_in_min => 10 } }
     its(:valid?) { should be_true }
   end
+  
+  context 'when created with an invalid environment' do
+    it 'should raise an error' do
+      expect{ PimonConfig.create_new('invalid') }.to raise_error(Errno::ENOENT)
+    end
+  end
+  
+  context 'when created with a broken environment configuration with basic_auth enabled but no username/password' do
+    it 'should raise an error' do
+      expect{ PimonConfig.create_new('test_broken') }.to raise_error(RuntimeError)
+    end
+  end
 end

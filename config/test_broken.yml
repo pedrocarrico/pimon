@@ -1,0 +1,19 @@
+basic_auth:
+  enabled: true
+redis:
+  socket: /thou/shalt/not/use/redis/on/test/environment
+chart:
+  cpu:
+    color: '#D2691E'
+  mem:
+    color: '#87CEFA'
+  swap:
+    color: '#3CB371'
+queues:
+  time: pimon_time
+  cpu:  pimon_cpu
+  mem:  pimon_mem
+  swap: pimon_swap
+stats:
+  slices: 6
+  time_period_in_min: 10

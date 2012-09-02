@@ -1,5 +1,3 @@
-require 'bundler/setup'
-
 require 'date'
 
 class StatsCollector
@@ -7,20 +5,6 @@ class StatsCollector
     @config = config
     @redis = redis
     @number_of_checks = config.stats[:slices]
-  end
-  
-  def check_stats
-    cpu_idle = vmstat[3].split(" ")[14].to_i
-    
-    ram = free[1].split(" ")
-    swap = free[2].split(" ")
-    
-    mem_total  = ram[1].to_i
-    mem_used   = ram[2].to_i
-    swap_total = swap[1].to_i
-    swap_used  = swap[2].to_i
-    
-    [ 100 - cpu_idle , ((mem_used.to_f / mem_total) * 100).to_i, ((swap_used.to_f / swap_total) * 100).to_i ]
   end
   
   def collect_stats
@@ -64,8 +48,18 @@ class StatsCollector
   
   private
   
-  def vmstat
-    @vmstate ||= `vmstat 1 2`.split(/\n/)
+  def check_stats
+    cpu_idle = vmstat[3].split(" ")[14].to_i
+    
+    ram = free[1].split(" ")
+    swap = free[2].split(" ")
+    
+    mem_total  = ram[1].to_i
+    mem_used   = ram[2].to_i
+    swap_total = swap[1].to_i
+    swap_used  = swap[2].to_i
+
+    [ 100 - cpu_idle , ((mem_used.to_f / mem_total) * 100).to_i, ((swap_used.to_f / swap_total) * 100).to_i ]
   end
   
   def free
@@ -77,5 +71,9 @@ class StatsCollector
     @redis.lpop(@config.queues[:cpu])
     @redis.lpop(@config.queues[:mem])
     @redis.lpop(@config.queues[:swap])
+  end
+  
+  def vmstat
+    @vmstate ||= `vmstat 1 2`.split(/\n/)
   end
 end
