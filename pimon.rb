@@ -44,6 +44,7 @@ class Pimon < Sinatra::Base
     @o[:time] = {}
     @o.merge!(settings.config.chart)
     @o[:time][:stats], @o[:cpu][:stats], @o[:mem][:stats], @o[:swap][:stats] = settings.stats_checker.show_stats
+    @o[:refresh_interval_in_millis] = settings.config.stats[:time_period_in_min] * 60 * 1000
     
     haml :index
   end

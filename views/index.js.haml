@@ -94,5 +94,5 @@
     changeFavicon();
     setTimeout(function() {
       window.location.reload();
-    }, 600000);
+    }, #{@o[:refresh_interval_in_millis]});
   });
