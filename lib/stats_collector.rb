@@ -47,9 +47,9 @@ class StatsCollector
   
   def check_stats
     cpu_idle = vmstat[3].split(" ")[14].to_i
-    
-    ram = free[1].split(" ")
-    swap = free[2].split(" ")
+    mem = free
+    ram = mem[1].split(" ")
+    swap = mem[2].split(" ")
     
     mem_total  = ram[1].to_i
     mem_used   = ram[2].to_i
@@ -60,7 +60,7 @@ class StatsCollector
   end
   
   def free
-    @free ||= `free -o -m`.split(/\n/)
+    `free -o -m`.split(/\n/)
   end
   
   def pop_old_stats
@@ -76,6 +76,6 @@ class StatsCollector
   end
   
   def vmstat
-    @vmstate ||= `vmstat 1 2`.split(/\n/)
+    `vmstat 1 2`.split(/\n/)
   end
 end

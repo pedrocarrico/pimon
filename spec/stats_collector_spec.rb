@@ -9,7 +9,7 @@ describe 'StatsCollector' do
     subject { @stats_collector }
     
     it 'should collect_stats' do
-      @stats_collector.should_receive(:free).exactly(2).times.and_return(fake_free)
+      @stats_collector.should_receive(:free).and_return(fake_free)
       @stats_collector.should_receive(:vmstat).and_return(fake_vmstat)
       
       @stats_collector.collect_stats
