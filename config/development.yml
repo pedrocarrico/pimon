@@ -19,4 +19,4 @@ stats_collector:
   pid_dir : pids
   log_dir : log
   number_of_stats: 6
-  time_period_in_min: 10
+  time_period_in_min: 1
