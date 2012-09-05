@@ -15,9 +15,8 @@ highcharts to display some nice graphs on your web browser.
 3. bundle
 4. Use the supplied development config template in the config directory and make your own development config.yml
 5. ./dev_server.sh # run the sinatra app
-6. ruby stats_checker.rb # collect some stats
+6. ruby stats_checker.rb start # start collecting some stats
 7. go to http://localhost:3000 and PROFIT!
-8. You may want to put "ruby stats_checker.rb" in your crontab to collect some stats over time
 
 ## Configuration
 1. basic_auth - enable or disable, configure username and password
