@@ -5,6 +5,7 @@ gem 'haml'
 gem 'redis'
 gem 'sinatra', :require => 'sinatra/base'
 gem 'thin'
+gem 'daemons'
 
 gem 'pry', :group => [:development, :test]
 

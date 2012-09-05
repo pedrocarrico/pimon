@@ -19,11 +19,11 @@ after 'deploy:update_code', 'deploy:bundle_install'
 
 namespace :deploy do
   task :start, :roles => [:web, :app] do
-    run "cd #{deploy_to}/current && nohup thin -C config/thin/config.yml -R config/config.ru start"
+    run "cd #{deploy_to}/current && nohup thin -C config/thin/config.yml -R config/config.ru start && RACK_ENV=production ruby check_stats.rb start"
   end
   
   task :stop, :roles => [:web, :app] do
-    run "cd #{deploy_to}/current && nohup thin -C config/thin/config.yml -R config/config.ru stop"
+    run "cd #{deploy_to}/current && nohup thin -C config/thin/config.yml -R config/config.ru stop && RACK_ENV=production ruby check_stats.rb stop"
   end
   
   task :restart, :roles => [:web, :app] do

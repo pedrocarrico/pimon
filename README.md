@@ -24,7 +24,7 @@ highcharts to display some nice graphs on your web browser.
 2. redis - location of the redis socket
 3. chart - colors for each chart
 4. queues - redis list names for the series in the charts
-5. stats - configure number of slices and time period between them
+5. stats - configure number of stats and time period between them
 
 ## Deployment
 To deploy on your raspberry pi you just have to have ssh enabled and your keys authorized.  

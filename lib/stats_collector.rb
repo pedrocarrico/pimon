@@ -4,16 +4,13 @@ class StatsCollector
   def initialize(config, redis)
     @config = config
     @redis = redis
-    @number_of_checks = config.stats[:slices]
+    @number_of_checks = config.stats[:number_of_stats]
   end
   
   def collect_stats
-    queue_size = @redis.llen(@config.queues[:time])
+    pop_old_stats
     
     @redis.pipelined do
-      if queue_size == @number_of_checks
-        pop_old_stats
-      end
       
       cpu_usage, mem_usage, swap_usage = check_stats
       
@@ -25,7 +22,7 @@ class StatsCollector
   end
   
   def last_update
-    time = @redis.lindex(@config.queues[:time], @config.stats[:slices] - 1)
+    time = @redis.lindex(@config.queues[:time], @config.stats[:number_of_stats] - 1)
     
     DateTime.parse(time) if time
   end
@@ -67,10 +64,15 @@ class StatsCollector
   end
   
   def pop_old_stats
-    @redis.lpop(@config.queues[:time])
-    @redis.lpop(@config.queues[:cpu])
-    @redis.lpop(@config.queues[:mem])
-    @redis.lpop(@config.queues[:swap])
+    queue_size = @redis.llen(@config.queues[:time])
+    
+    while queue_size >= @config.stats[:number_of_stats]
+      @redis.lpop(@config.queues[:time])
+      @redis.lpop(@config.queues[:cpu])
+      @redis.lpop(@config.queues[:mem])
+      @redis.lpop(@config.queues[:swap])
+      queue_size -= 1
+    end
   end
   
   def vmstat

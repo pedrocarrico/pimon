@@ -1,8 +1,10 @@
+.idea
 .rspec
 bin/free
 bin/vmstat
 bin/*.o
 config/thin/development_config.yml
 coverage
-log/*
+log
+pids
 sandbox.sh

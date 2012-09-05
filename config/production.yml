@@ -16,6 +16,9 @@ queues:
   cpu:  pimon_cpu
   mem:  pimon_mem
   swap: pimon_swap
-stats:
-  slices: 6
+stats_collector:
+  daemonize: true
+  pid_dir : /home/pi/app/pimon/shared/pids/
+  log_dir : /home/pi/app/pimon/shared/log/
+  number_of_stats: 6
   time_period_in_min: 10

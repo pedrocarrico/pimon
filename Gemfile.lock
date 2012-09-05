@@ -64,6 +64,7 @@ PLATFORMS
 
 DEPENDENCIES
   capistrano
+  daemons
   haml
   mock_redis (~> 0.5.0)
   pry

@@ -37,7 +37,7 @@ class PimonConfig
   end
   
   def stats
-    @config[:stats]
+    @config[:stats_collector]
   end
   
   def valid?
