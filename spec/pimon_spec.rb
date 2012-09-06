@@ -19,7 +19,7 @@ describe "Pimon" do
     
     it "should be not authorized" do
       get '/'
-      last_response.status.should == 401
+      expect(last_response.status).to eq(401)
     end
   end
   
@@ -29,7 +29,7 @@ describe "Pimon" do
     it "should be success" do
       
       get '/'
-      last_response.should be_ok
+      expect(last_response).to be_ok
     end
   end
 end

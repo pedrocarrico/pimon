@@ -9,9 +9,9 @@ gem 'thin'
 gem 'pry', :group => [:development, :test]
 
 group :test do
-  gem 'mock_redis', "~> 0.5.0"
+  gem 'mock_redis', '~> 0.5.0'
   gem 'rack-test'
-  gem 'rspec'
+  gem 'rspec', '~> 2.11.0'
   gem 'simplecov', :require => false
   gem 'simplecov-rcov'
   gem 'timecop'

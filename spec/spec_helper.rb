@@ -21,3 +21,11 @@ require File.join(File.dirname(__FILE__), '..', 'pimon.rb')
 
 require 'sinatra'
 require 'rack/test'
+
+# Disable the `should` syntax...as explained here:
+# http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax
+RSpec.configure do |config|
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
+  end
+end

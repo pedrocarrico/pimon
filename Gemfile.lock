@@ -69,7 +69,7 @@ DEPENDENCIES
   pry
   rack-test
   redis
-  rspec
+  rspec (~> 2.11.0)
   simplecov
   simplecov-rcov
   sinatra
