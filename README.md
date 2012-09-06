@@ -1,6 +1,6 @@
 # Pimon
 
-[![Build Status](https://secure.travis-ci.org/pedrocarrico/pimon.png)](http://travis-ci.org/pedrocarrico/pimon) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/pedrocarrico/pimon)
+[![Build Status](https://secure.travis-ci.org/pedrocarrico/pimon.png)](http://travis-ci.org/pedrocarrico/pimon) [![Dependency Status](https://gemnasium.com/pedrocarrico/pimon.png?travis)](https://gemnasium.com/pedrocarrico/pimon) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/pedrocarrico/pimon)
 
 ![Pimon](http://pedrocarrico.net/pimon.jpg "Pimon")
 
