@@ -15,8 +15,5 @@ queues:
   mem:  pimon_mem
   swap: pimon_swap
 stats_collector:
-  daemonize: false
-  pid_dir : pids
-  log_dir : log
   number_of_stats: 6
   time_period_in_min: 1

@@ -16,9 +16,17 @@ class Pimon < Sinatra::Base
       end
     end
     
+    EventMachine::next_tick do
+      settings.timer = EventMachine::add_periodic_timer(config.stats[:time_period_in_min] * 60) do
+        puts "Checking stats at #{ Time.now.strftime("%Y-%m-%d %H:%M:%S") }"
+        settings.stats_checker.collect_stats
+      end
+    end
+    
     set :public_folder, 'public'
     set :config, config
     set :stats_checker, StatsCollector.new(config, Redis.new(:path => config.redis[:socket]))
+    set :timer, nil
   end
   
   configure :test do
@@ -37,7 +45,7 @@ class Pimon < Sinatra::Base
   end
   
   get '/' do
-    last_update = settings.stats_checker.last_update
+      last_update = settings.stats_checker.last_update
     last_modified(last_update) if ENV['RACK_ENV'] != 'development' && last_update
     
     @o = {}

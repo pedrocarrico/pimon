@@ -16,7 +16,7 @@ describe 'PimonConfig' do
     its(:environment) { should == 'test' }
     its(:queues) { should == { :time => 'pimon_time', :cpu => 'pimon_cpu', :mem => 'pimon_mem', :swap => 'pimon_swap' } }
     its(:redis) { should == { :socket  => '/thou/shalt/not/use/redis/on/test/environment' } }
-    its(:stats) { should == { :daemonize => false, :pid_dir => 'pids', :log_dir => 'log', :number_of_stats => 6, :time_period_in_min => 10 } }
+    its(:stats) { should == { :number_of_stats => 6, :time_period_in_min => 10 } }
     its(:valid?) { should be_true }
   end
   
