@@ -6,15 +6,18 @@ require "#{File.dirname(__FILE__)}/lib/stats_collector"
 require 'sinatra'
 
 class Pimon < Sinatra::Base
-  configure :development, :production do
-    require 'redis'
-    config = PimonConfig.create_new(ENV['RACK_ENV'])
-    
-    if config.is_basic_auth_enabled?
+  def self.configure_basic_auth
+    if settings.config.is_basic_auth_enabled?
       use Rack::Auth::Basic, "Restricted Area" do |username, password|
         [username, password] == config.basic_auth
       end
     end
+  end
+  
+  configure :development, :production do
+    require 'redis'
+    
+    config = PimonConfig.create_new(ENV['RACK_ENV'])
     
     EventMachine::next_tick do
       settings.timer = EventMachine::add_periodic_timer(config.stats[:time_period_in_min] * 60) do
@@ -27,6 +30,8 @@ class Pimon < Sinatra::Base
     set :config, config
     set :stats_checker, StatsCollector.new(config, Redis.new(:path => config.redis[:socket]))
     set :timer, nil
+    
+    self.configure_basic_auth
   end
   
   configure :test do
@@ -34,14 +39,12 @@ class Pimon < Sinatra::Base
     
     config = PimonConfig.create_new('test')
     
-    if config.is_basic_auth_enabled?
-      use Rack::Auth::Basic, "Restricted Area" do |username, password|
-        [username, password] == config.basic_auth
-      end
-    end
     set :public_folder, 'public'
     set :config, config
     set :stats_checker, StatsCollector.new(config, MockRedis.new)
+    set :timer, nil
+    
+    self.configure_basic_auth
   end
   
   get '/' do
