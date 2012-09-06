@@ -15,7 +15,13 @@ describe 'StatsCollector' do
       @stats_collector.collect_stats
     end
     
-    its(:show_stats) { should == [[], [], [], []] }
+    its(:show_stats) { should == { :time => { :stats => [] },
+                                   :cpu => { :color=>"#D2691E", :stats => [] },
+                                   :mem => { :color=>"#87CEFA", :stats => [] },
+                                   :swap => { :color=>"#3CB371", :stats => [] },
+                                   :refresh_interval_in_millis => 600000
+                                  }
+                     }
     
     context 'when collected some stats' do
       before do
@@ -28,10 +34,13 @@ describe 'StatsCollector' do
         end
       end
       
-      its(:show_stats) { should == [["12:00:00", "12:00:00", "12:00:00", "12:00:00", "12:00:00", "12:00:00"],
-                                    [50, 50, 50, 50, 50, 50],
-                                    [78, 78, 78, 78, 78, 78],
-                                    [50, 50, 50, 50, 50, 50]] }
+      its(:show_stats) { should == { :time => { :stats => ["12:00:00", "12:00:00", "12:00:00", "12:00:00", "12:00:00", "12:00:00"] },
+                                     :cpu => { :color=>"#D2691E", :stats => [50, 50, 50, 50, 50, 50] },
+                                     :mem => { :color=>"#87CEFA", :stats => [78, 78, 78, 78, 78, 78] },
+                                     :swap => { :color=>"#3CB371", :stats => [50, 50, 50, 50, 50, 50] },
+                                     :refresh_interval_in_millis => 600000
+                                   } 
+                       }
     end
   end
 end

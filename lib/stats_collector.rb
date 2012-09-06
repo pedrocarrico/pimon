@@ -4,7 +4,6 @@ class StatsCollector
   def initialize(config, redis)
     @config = config
     @redis = redis
-    @number_of_checks = config.stats[:number_of_stats]
   end
   
   def collect_stats
@@ -35,15 +34,27 @@ class StatsCollector
       @redis.lrange(@config.queues[:swap], 0, -1)
     end
     
-    time = time.reduce([]){ |acc, value| acc << (/\d\d:\d\d:\d\d/.match(value))[0]}
-    cpu  = cpu.reduce([]){ |acc, value| acc << value.to_i}
-    mem  = mem.reduce([]){ |acc, value| acc << value.to_i}
-    swap = swap.reduce([]){ |acc, value| acc << value.to_i}
+    time = time.map { |t| (/\d\d:\d\d:\d\d/.match(t))[0] }
+    cpu  = cpu.map(&:to_i)
+    mem  = mem.map(&:to_i)
+    swap = swap.map(&:to_i)
     
-    [time, cpu, mem, swap]
+    o = {}
+    o.merge!(@config.chart)
+    o[:time] = {}
+    o[:time][:stats] = time
+    o[:cpu][:stats] = cpu
+    o[:mem][:stats] = mem
+    o[:swap][:stats] = swap
+    o[:refresh_interval_in_millis] = @config.stats[:time_period_in_min] * 60 * 1000
+    o
   end
   
   private
+  
+  def calculate_percentage(used, total)
+    ((used.to_f / total) * 100).to_i
+  end
   
   def check_stats
     cpu_idle = vmstat[3].split(" ")[14].to_i
@@ -55,8 +66,8 @@ class StatsCollector
     mem_used   = ram[2].to_i
     swap_total = swap[1].to_i
     swap_used  = swap[2].to_i
-
-    [ 100 - cpu_idle , ((mem_used.to_f / mem_total) * 100).to_i, ((swap_used.to_f / swap_total) * 100).to_i ]
+    
+    [ 100 - cpu_idle , calculate_percentage(mem_used, mem_total), calculate_percentage(swap_used, swap_total) ]
   end
   
   def free

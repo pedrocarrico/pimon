@@ -45,14 +45,10 @@ class Pimon < Sinatra::Base
   end
   
   get '/' do
-      last_update = settings.stats_checker.last_update
+    last_update = settings.stats_checker.last_update
     last_modified(last_update) if ENV['RACK_ENV'] != 'development' && last_update
     
-    @o = {}
-    @o[:time] = {}
-    @o.merge!(settings.config.chart)
-    @o[:time][:stats], @o[:cpu][:stats], @o[:mem][:stats], @o[:swap][:stats] = settings.stats_checker.show_stats
-    @o[:refresh_interval_in_millis] = settings.config.stats[:time_period_in_min] * 60 * 1000
+    @o = settings.stats_checker.show_stats
     
     haml :index
   end
