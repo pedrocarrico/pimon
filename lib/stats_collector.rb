@@ -9,11 +9,10 @@ class StatsCollector
   def collect_stats
     pop_old_stats
     
+    time, cpu_usage, mem_usage, swap_usage = check_stats
+    
     @redis.pipelined do
-      
-      cpu_usage, mem_usage, swap_usage = check_stats
-      
-      @redis.rpush(@config.queues[:time], Time.now.strftime("%Y-%m-%d %H:%M:%S"))
+      @redis.rpush(@config.queues[:time], time)
       @redis.rpush(@config.queues[:cpu], cpu_usage)
       @redis.rpush(@config.queues[:mem], mem_usage)
       @redis.rpush(@config.queues[:swap], swap_usage)
@@ -57,36 +56,38 @@ class StatsCollector
   end
   
   def check_stats
-    cpu_idle = vmstat[3].split(" ")[14].to_i
-    mem = free
-    ram = mem[1].split(" ")
-    swap = mem[2].split(" ")
+    mem_total, mem_used, swap_total, swap_used = free
     
-    mem_total  = ram[1].to_i
-    mem_used   = ram[2].to_i
-    swap_total = swap[1].to_i
-    swap_used  = swap[2].to_i
-    
-    [ 100 - cpu_idle , calculate_percentage(mem_used, mem_total), calculate_percentage(swap_used, swap_total) ]
+    [ Time.now.strftime("%Y-%m-%d %H:%M:%S"), 100 - cpu_idle , calculate_percentage(mem_used, mem_total), calculate_percentage(swap_used, swap_total) ]
+  end
+  
+  def cpu_idle
+    vmstat[3].split(" ")[14].to_i
   end
   
   def free
-    `free -o -m`.split(/\n/)
+    output = `free -o -m`.split(/\n/)
+    
+    mem = output[1].split(" ")
+    swap = output[2].split(" ")
+    
+    [mem[1].to_i, mem[2].to_i , swap[1].to_i, swap[2].to_i]
+  end
+  
+  def pop_all_queues
+    @config.queues.each_value { |queue| @redis.lpop(queue) }
   end
   
   def pop_old_stats
     queue_size = @redis.llen(@config.queues[:time])
     
-    while queue_size >= @config.stats[:number_of_stats]
-      @redis.lpop(@config.queues[:time])
-      @redis.lpop(@config.queues[:cpu])
-      @redis.lpop(@config.queues[:mem])
-      @redis.lpop(@config.queues[:swap])
-      queue_size -= 1
+    if queue_size >= @config.stats[:number_of_stats]
+      (queue_size - @config.stats[:number_of_stats] + 1).times { pop_all_queues }
     end
   end
   
   def vmstat
+    # The second result of vmstat is more accurate
     `vmstat 1 2`.split(/\n/)
   end
 end

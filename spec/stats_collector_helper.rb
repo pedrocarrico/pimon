@@ -1,7 +1,12 @@
 def fake_free(mem_used=200, mem_free=56, swap_used=50, swap_free=50)
-  ("             total       used       free     shared    buffers     cached\n" +
+  output = ("             total       used       free     shared    buffers     cached\n" +
   "Mem:           #{mem_used + mem_free}        #{mem_used}         #{mem_free}          0          4        110\n" +
   "Swap:          #{swap_used + swap_free}        #{swap_used}         #{swap_free}\n").split(/\n/)
+  
+  mem = output[1].split(" ")
+  swap = output[2].split(" ")
+  
+  [mem[1].to_i, mem[2].to_i , swap[1].to_i, swap[2].to_i]
 end
 
 def fake_vmstat(cpu_idle=50)
