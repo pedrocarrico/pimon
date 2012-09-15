@@ -9,6 +9,7 @@ describe 'StatsCollector' do
     subject { @stats_collector }
     
     it 'should collect_stats' do
+      @stats_collector.should_receive(:disk).any_number_of_times.and_return(25)
       @stats_collector.should_receive(:free).and_return(fake_free)
       @stats_collector.should_receive(:vmstat).and_return(fake_vmstat)
       
@@ -30,6 +31,7 @@ describe 'StatsCollector' do
     context 'when collected some stats' do
       before do
         Timecop.freeze(Time.local(2012, 9, 1, 12, 0, 0))
+        @stats_collector.should_receive(:disk).any_number_of_times.and_return(25)
         @stats_collector.should_receive(:free).any_number_of_times.and_return(fake_free)
         @stats_collector.should_receive(:vmstat).any_number_of_times.and_return(fake_vmstat)
         
