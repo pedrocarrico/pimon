@@ -25,6 +25,7 @@ require 'rack/test'
 # Disable the `should` syntax...as explained here:
 # http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax
 RSpec.configure do |config|
+  config.order = :random
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
