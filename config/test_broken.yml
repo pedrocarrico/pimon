@@ -5,6 +5,8 @@ redis:
 chart:
   cpu:
     color: '#D2691E'
+  disk:
+    color: '#CDC673'
   mem:
     color: '#87CEFA'
   swap:
@@ -12,6 +14,7 @@ chart:
 queues:
   time: pimon_time
   cpu:  pimon_cpu
+  disk: pimon_disk
   mem:  pimon_mem
   swap: pimon_swap
 stats_collector:

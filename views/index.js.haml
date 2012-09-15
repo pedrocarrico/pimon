@@ -1,6 +1,17 @@
 :javascript
   $(function () {
-    var chart;
+    var chart,
+        cpu = #{o[:cpu][:stats]},
+        disk = #{o[:disk][:stats]},
+        mem = #{o[:mem][:stats]},
+        swap = #{o[:swap][:stats]},
+        time = #{o[:time][:stats]},
+        titleStats = [ { 'legend' : 'CPU', 'stat' : cpu[cpu.length - 1], 'color' : '#{o[:cpu][:color]}' } ,
+                       { 'legend' : 'MEM', 'stat' : mem[mem.length - 1], 'color' : '#{o[:mem][:color]}' } ,
+                       { 'legend' : 'SWAP', 'stat' : swap[swap.length - 1], 'color' : '#{o[:swap][:color]}'},
+                       { 'legend' : 'DISK', 'stat' : disk[disk.length - 1], 'color' : '#{o[:disk][:color]}'} ],
+        i = 0;
+    
     $(document).ready(function() {
         chart = new Highcharts.Chart({
             chart: {
@@ -18,7 +29,7 @@
                 x: -20
             },
             xAxis: {
-                categories: #{o[:time][:stats]}
+                categories: time
             },
             yAxis: {
                 title: {
@@ -49,31 +60,26 @@
             series: [{
                 name: 'cpu',
                 color: '#{o[:cpu][:color]}',
-                data: #{o[:cpu][:stats]}
+                data: cpu
             },
             {
                 name: 'mem',
                 color: '#{o[:mem][:color]}',
-                data: #{o[:mem][:stats]}
+                data: mem
             },
             {
                 name: 'swap',
                 color: '#{o[:swap][:color]}',
-                data: #{o[:swap][:stats]}
+                data: swap
+            },
+            {
+                name: 'disk',
+                color: '#{o[:disk][:color]}',
+                data: disk
             }]
-          
         });
     });
-  
-  
-    var cpu = #{o[:cpu][:stats]},
-        mem = #{o[:mem][:stats]},
-        swap = #{o[:swap][:stats]},
-        titleStats = [ { 'legend' : 'CPU', 'stat' : cpu[cpu.length - 1], 'color' : '#{o[:cpu][:color]}' } ,
-                       { 'legend' : 'MEM', 'stat' : mem[mem.length - 1], 'color' : '#{o[:mem][:color]}' } ,
-                       { 'legend' : 'SWAP', 'stat' : swap[swap.length - 1], 'color' : '#{o[:swap][:color]}'} ],
-        i = 0;
-  
+    
     function changeFavicon() {
       Piecon.setOptions({
         color: titleStats[i]['color'], // Pie chart color
@@ -82,14 +88,14 @@
         fallback: 'force' // Toggles displaying percentage in the title bar (possible values - true, false, 'force')
       });
       Piecon.setProgress(titleStats[i]['stat']);
-    
+      
       $('title').text(titleStats[i]['stat'] + '% ' + titleStats[i]['legend'])
       i++;
       if (i >= titleStats.length) {
         i = 0;
       } 
     }
-  
+    
     setInterval(changeFavicon, 3000);
     changeFavicon();
     setTimeout(function() {
