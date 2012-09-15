@@ -21,7 +21,6 @@ class Pimon < Sinatra::Base
     
     EventMachine::next_tick do
       settings.timer = EventMachine::add_periodic_timer(config.stats[:time_period_in_min] * 60) do
-        puts "Checking stats at #{ Time.now.strftime("%Y-%m-%d %H:%M:%S") }"
         settings.stats_checker.collect_stats
       end
     end
