@@ -57,9 +57,10 @@ To use them you must first compile them using _make_ and then include the bin di
 in your $PATH to have them available when you run the stats checker.
 
 ## TODO
-1. Disk stats
+1. Improve disk stats, have a way of having custom mount points
 2. Capistrano task to reset production basic_auth username and password
 3. Show uptime
+4. Change configuration in realtime
 
 ## Copyright
 Licensed under the [WTFPL](http://en.wikipedia.org/wiki/WTFPL "Do What The Fuck You Want To Public License") license.
