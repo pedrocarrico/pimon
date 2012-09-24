@@ -16,14 +16,16 @@ describe 'StatsCollector' do
       @stats_collector.collect_stats
     end
     
-    its(:show_stats) { should == { :cpu=> { :color => "#D2691E",
+    its(:show_stats) { should == { :cpu=> { :color => '#D2691E',
                                             :stats => [] },
-                                   :disk=> { :color => "#CDC673",
+                                   :disk=> { :color => '#CDC673',
                                              :stats => [] },
-                                   :mem => { :color => "#87CEFA",
+                                   :mem => { :color => '#87CEFA',
                                              :stats => [] },
-                                   :swap => { :color => "#3CB371",
-                                              :stats=> [] },
+                                   :swap => { :color => '#3CB371',
+                                              :stats => [] },
+                                   :temp => { :color => '#FF9B04',
+                                              :stats=>[] },
                                    :time => { :stats=>[] } ,
                                    :refresh_interval_in_millis=>600000 }
                      }
@@ -34,21 +36,24 @@ describe 'StatsCollector' do
         @stats_collector.should_receive(:disk).any_number_of_times.and_return(25)
         @stats_collector.should_receive(:free).any_number_of_times.and_return(fake_free)
         @stats_collector.should_receive(:vmstat).any_number_of_times.and_return(fake_vmstat)
+        @stats_collector.should_receive(:thermal).any_number_of_times.and_return(40)
         
         7.times do
           @stats_collector.collect_stats
         end
       end
       
-      its(:show_stats) { should == { :cpu => { :color => "#D2691E",
+      its(:show_stats) { should == { :cpu => { :color => '#D2691E',
                                                :stats => [50, 50, 50, 50, 50, 50] },
-                                     :disk => { :color=> "#CDC673",
+                                     :disk => { :color=> '#CDC673',
                                                 :stats => [25, 25, 25, 25, 25, 25] },
-                                     :mem => { :color=> "#87CEFA",
-                                               :stats=>[78, 78, 78, 78, 78, 78] },
-                                     :swap => { :color => "#3CB371",
+                                     :mem => { :color => '#87CEFA',
+                                               :stats => [78, 78, 78, 78, 78, 78] },
+                                     :swap => { :color => '#3CB371',
                                                 :stats => [50, 50, 50, 50, 50, 50] },
-                                     :time => {:stats=>["12:00:00", "12:00:00", "12:00:00", "12:00:00", "12:00:00", "12:00:00"]},
+                                     :temp => { :color => '#FF9B04',
+                                                :stats=>[40, 40, 40, 40, 40, 40]},
+                                     :time =>  {:stats => ['12:00:00', '12:00:00', '12:00:00', '12:00:00', '12:00:00', '12:00:00']},
                                      :refresh_interval_in_millis=>600000}
                        }
     end

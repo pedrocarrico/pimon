@@ -11,6 +11,8 @@ chart:
     color: '#CDC673'
   mem:
     color: '#87CEFA'
+  temp:
+    color: '#FF9B04'
   swap:
     color: '#3CB371'
 queues:
@@ -19,6 +21,7 @@ queues:
   disk: pimon_disk
   mem:  pimon_mem
   swap: pimon_swap
+  temp: pimon_temp
 stats_collector:
   number_of_stats: 6
   time_period_in_min: 10

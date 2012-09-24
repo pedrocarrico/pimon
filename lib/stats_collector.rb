@@ -9,7 +9,7 @@ class StatsCollector
   def collect_stats
     pop_old_stats
     
-    time, cpu_usage, mem_usage, swap_usage, disk = check_stats
+    time, cpu_usage, mem_usage, swap_usage, disk, temp = check_stats
     
     @redis.pipelined do
       @redis.rpush(@config.queues[:time], time)
@@ -17,6 +17,7 @@ class StatsCollector
       @redis.rpush(@config.queues[:mem], mem_usage)
       @redis.rpush(@config.queues[:swap], swap_usage)
       @redis.rpush(@config.queues[:disk], disk)
+      @redis.rpush(@config.queues[:temp], temp)
     end
   end
   
@@ -27,30 +28,29 @@ class StatsCollector
   end
   
   def show_stats
-    time, cpu, mem, swap, disk = @redis.pipelined do
+    time, cpu, mem, swap, disk, temp = @redis.pipelined do
       @redis.lrange(@config.queues[:time], 0, -1)
       @redis.lrange(@config.queues[:cpu],  0, -1)
       @redis.lrange(@config.queues[:mem],  0, -1)
       @redis.lrange(@config.queues[:swap], 0, -1)
       @redis.lrange(@config.queues[:disk], 0, -1)
+      @redis.lrange(@config.queues[:temp], 0, -1)
     end
     
-    time = time.map { |t| (/\d\d:\d\d:\d\d/.match(t))[0] }
-    cpu  = cpu.map(&:to_i)
-    mem  = mem.map(&:to_i)
-    swap = swap.map(&:to_i)
-    disk = disk.map(&:to_i)
-    
-    o = {}
-    o.merge!(@config.chart)
-    o[:time] = {}
-    o[:time][:stats] = time
-    o[:cpu][:stats] = cpu
-    o[:mem][:stats] = mem
-    o[:swap][:stats] = swap
-    o[:disk][:stats] = disk
-    o[:refresh_interval_in_millis] = @config.stats[:time_period_in_min] * 60 * 1000
-    o
+    {
+      :time => { :stats => time.map { |t| (/\d\d:\d\d:\d\d/.match(t))[0] } },
+      :cpu  => { :color => @config.chart[:cpu][:color],
+                 :stats => cpu.map(&:to_i) },
+      :mem  => { :color => @config.chart[:mem][:color],
+                 :stats => mem.map(&:to_i) },
+      :swap => { :color => @config.chart[:swap][:color],
+                 :stats => swap.map(&:to_i) },
+      :disk => { :color => @config.chart[:disk][:color],
+                 :stats => disk.map(&:to_i) },
+      :temp => { :color => @config.chart[:temp][:color],
+                 :stats => temp.map(&:to_i) },
+      :refresh_interval_in_millis => @config.stats[:time_period_in_min] * 60 * 1000
+    }
   end
   
   private
@@ -62,7 +62,7 @@ class StatsCollector
   def check_stats
     mem_total, mem_used, swap_total, swap_used = free
     
-    [ Time.now.strftime("%Y-%m-%d %H:%M:%S"), 100 - cpu_idle , calculate_percentage(mem_used, mem_total), calculate_percentage(swap_used, swap_total), disk]
+    [ Time.now.strftime("%Y-%m-%d %H:%M:%S"), 100 - cpu_idle , calculate_percentage(mem_used, mem_total), calculate_percentage(swap_used, swap_total), disk, thermal]
   end
   
   def cpu_idle
@@ -92,6 +92,10 @@ class StatsCollector
     if queue_size >= @config.stats[:number_of_stats]
       (queue_size - @config.stats[:number_of_stats] + 1).times { pop_all_queues }
     end
+  end
+  
+  def thermal
+    `cat /sys/class/thermal/thermal_zone0/temp`[0..1].to_i
   end
   
   def vmstat
