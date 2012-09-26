@@ -1,5 +1,6 @@
+# encoding: UTF-8
+
 require 'spec_helper'
-require 'stats_collector_helper'
 
 describe 'StatsCollector' do
   context 'when new with a valid config and redis' do
@@ -9,52 +10,51 @@ describe 'StatsCollector' do
     subject { @stats_collector }
     
     it 'should collect_stats' do
-      @stats_collector.should_receive(:disk).any_number_of_times.and_return(25)
-      @stats_collector.should_receive(:free).and_return(fake_free)
-      @stats_collector.should_receive(:vmstat).and_return(fake_vmstat)
+      Probe::CpuUsage.should_receive(:check)
+      Probe::DiskUsage.should_receive(:check)
+      Probe::MemoryUsage.should_receive(:check)
+      Probe::SwapUsage.should_receive(:check)
+      Probe::Temperature.should_receive(:check)
       
       @stats_collector.collect_stats
     end
     
-    its(:show_stats) { should == { :cpu=> { :color => '#D2691E',
-                                            :stats => [] },
-                                   :disk=> { :color => '#CDC673',
-                                             :stats => [] },
-                                   :mem => { :color => '#87CEFA',
-                                             :stats => [] },
-                                   :swap => { :color => '#3CB371',
-                                              :stats => [] },
-                                   :temp => { :color => '#FF9B04',
-                                              :stats=>[] },
-                                   :time => { :stats=>[] } ,
-                                   :refresh_interval_in_millis=>600000 }
+    its(:show_stats) { 
+                        should == {
+                                    :time => { :stats => [] },
+                                    :refresh_interval_in_millis => 600000,
+                                    :cpu => { :stats => [], :color => '#D2691E', :unit => '%' },
+                                    :mem => { :stats => [], :color => '#87CEFA', :unit => '%' },
+                                    :swap => {:stats => [], :color => '#3CB371', :unit => '%' },
+                                    :disk => {:stats => [], :color => '#CDC673', :unit => '%' },
+                                    :temp => {:stats => [], :color => '#FF9B04', :unit => 'ºC' }
+                                  }
                      }
     
     context 'when collected some stats' do
       before do
         Timecop.freeze(Time.local(2012, 9, 1, 12, 0, 0))
-        @stats_collector.should_receive(:disk).any_number_of_times.and_return(25)
-        @stats_collector.should_receive(:free).any_number_of_times.and_return(fake_free)
-        @stats_collector.should_receive(:vmstat).any_number_of_times.and_return(fake_vmstat)
-        @stats_collector.should_receive(:thermal).any_number_of_times.and_return(40)
+        
+        Probe::CpuUsage.should_receive(:check).any_number_of_times.and_return(50)
+        Probe::DiskUsage.should_receive(:check).any_number_of_times.and_return(25)
+        Probe::MemoryUsage.should_receive(:check).any_number_of_times.and_return(78)
+        Probe::SwapUsage.should_receive(:check).any_number_of_times.and_return(50)
+        Probe::Temperature.should_receive(:check).any_number_of_times.and_return(40)
         
         7.times do
           @stats_collector.collect_stats
         end
       end
       
-      its(:show_stats) { should == { :cpu => { :color => '#D2691E',
-                                               :stats => [50, 50, 50, 50, 50, 50] },
-                                     :disk => { :color=> '#CDC673',
-                                                :stats => [25, 25, 25, 25, 25, 25] },
-                                     :mem => { :color => '#87CEFA',
-                                               :stats => [78, 78, 78, 78, 78, 78] },
-                                     :swap => { :color => '#3CB371',
-                                                :stats => [50, 50, 50, 50, 50, 50] },
-                                     :temp => { :color => '#FF9B04',
-                                                :stats=>[40, 40, 40, 40, 40, 40]},
-                                     :time =>  {:stats => ['12:00:00', '12:00:00', '12:00:00', '12:00:00', '12:00:00', '12:00:00']},
-                                     :refresh_interval_in_millis=>600000}
+      its(:show_stats) {
+                          should == {
+                                      :time => { :stats => ['12:00:00', '12:00:00', '12:00:00', '12:00:00', '12:00:00', '12:00:00']},
+                                      :refresh_interval_in_millis => 600000, :cpu => {:stats => [50, 50, 50, 50, 50, 50], :color => '#D2691E', :unit => '%'},
+                                      :mem => { :stats => [78, 78, 78, 78, 78, 78], :color =>'#87CEFA', :unit => '%'},
+                                      :swap=>{ :stats => [50, 50, 50, 50, 50, 50], :color => '#3CB371', :unit => '%'},
+                                      :disk=>{ :stats => [25, 25, 25, 25, 25, 25], :color => '#CDC673', :unit => '%'},
+                                      :temp=>{ :stats => [40, 40, 40, 40, 40, 40], :color => '#FF9B04', :unit => 'ºC'}
+                                    }
                        }
     end
   end

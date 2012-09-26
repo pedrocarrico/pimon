@@ -7,11 +7,11 @@
         swap = #{o[:swap][:stats]},
         time = #{o[:time][:stats]},
         temp = #{o[:temp][:stats]},
-        titleStats = [ { 'legend' : 'CPU', 'stat' : cpu[cpu.length - 1], 'color' : '#{o[:cpu][:color]}' } ,
-                       { 'legend' : 'MEM', 'stat' : mem[mem.length - 1], 'color' : '#{o[:mem][:color]}' } ,
-                       { 'legend' : 'SWAP', 'stat' : swap[swap.length - 1], 'color' : '#{o[:swap][:color]}'},
-                       { 'legend' : 'DISK', 'stat' : disk[disk.length - 1], 'color' : '#{o[:disk][:color]}'},
-                       { 'legend' : 'TEMP', 'stat' : temp[temp.length - 1], 'color' : '#{o[:temp][:color]}'} ],
+        titleStats = [ { 'legend' : 'CPU', 'stat' : cpu[cpu.length - 1], 'color' : '#{o[:cpu][:color]}', 'unit' : '#{o[:cpu][:unit]}' } ,
+                       { 'legend' : 'MEM', 'stat' : mem[mem.length - 1], 'color' : '#{o[:mem][:color]}', 'unit' : '#{o[:mem][:unit]}' } ,
+                       { 'legend' : 'SWAP', 'stat' : swap[swap.length - 1], 'color' : '#{o[:swap][:color]}', 'unit' : '#{o[:swap][:unit]}'},
+                       { 'legend' : 'DISK', 'stat' : disk[disk.length - 1], 'color' : '#{o[:disk][:color]}', 'unit' : '#{o[:disk][:unit]}'},
+                       { 'legend' : 'TEMP', 'stat' : temp[temp.length - 1], 'color' : '#{o[:temp][:color]}', 'unit' : '#{o[:temp][:unit]}'} ],
         i = 0;
     
     $(document).ready(function() {
@@ -35,7 +35,7 @@
             },
             yAxis: {
                 title: {
-                    text: 'Usage percentage'
+                    text: 'Usage'
                 },
                 plotLines: [{
                     value: 0,
@@ -48,7 +48,7 @@
             tooltip: {
                 formatter: function() {
                         return '<b>'+ this.series.name +'</b><br/>'+
-                        this.x +': '+ this.y +'%';
+                        this.x +': '+ this.y + (this.series.name === 'temp' ? '#{o[:temp][:unit]}' : '%');
                 }
             },
             legend: {
@@ -96,7 +96,7 @@
       });
       Piecon.setProgress(titleStats[i]['stat']);
       
-      $('title').text(titleStats[i]['stat'] + '% ' + titleStats[i]['legend'])
+      $('title').text(titleStats[i]['stat'] + titleStats[i]['unit'] + ' ' + titleStats[i]['legend'])
       i++;
       if (i >= titleStats.length) {
         i = 0;
