@@ -1,4 +1,4 @@
 require 'sinatra'
-require './lib/pimon'
+require "#{File.dirname(__FILE__)}/../lib/pimon"
 
 run Pimon

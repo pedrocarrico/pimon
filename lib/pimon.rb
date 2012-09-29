@@ -1,10 +1,13 @@
 $: << File.dirname(__FILE__)
 
-require 'bundler/setup'
-Bundler.require(:default, ENV['RACK_ENV'])
+if File.file?("Gemfile")
+  require 'bundler'
+  Bundler.require(:default, ENV['RACK_ENV'])
+end
+require 'eventmachine'
 require 'haml'
-require "pimon/pimon_config"
-require "pimon/stats_collector"
+require 'pimon/pimon_config'
+require 'pimon/stats_collector'
 require 'sinatra'
 
 class Pimon < Sinatra::Base

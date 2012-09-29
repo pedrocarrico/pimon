@@ -5,15 +5,16 @@
 ![Pimon](http://pedrocarrico.net/pimon.jpg "Pimon")
 
 ## Description
-Pimon is a simple server stats monitor designed for the raspberry pi.
-It uses redis lists to show the latest 6 observed statistics and also uses
-highcharts to display some nice graphs on your web browser.
+Pimon is a simple server monitor designed for the Raspberry Pi.
+It uses redis lists to keep the latest observed statistics and also uses
+highcharts to display some nice charts on your web browser.
 
 ## What do I need to get it to work?
 1. Install redis an configure it to run on a socket on /tmp/redis.sock
 2. bundle
 3. bin/pimon start # run the sinatra app
 4. go to http://localhost:3000 and PROFIT!
+Optionally you may install it as a gem and run it, please check "Installing as a gem" further down.
 
 ## Configuration
 1. basic_auth - enable or disable, configure username and password
@@ -46,6 +47,13 @@ rake coverage:spec
 ```
 Results will be in coverage/index.html directory.
 
+## Installing as a gem
+```
+gem install pimon
+```
+After installation just do _pimon start_ and go to http://localhost:3000 and check your stats 
+(This will only work on your Raspberry Pi and perhaps some other linux distros, check the quirks section for more info).
+
 ## Quirks
 Pimon uses _vmstat_ and _free_ to collect it's stats from the operating system and these are only
 available on operating systems that have the /proc filesystem.  
@@ -53,7 +61,7 @@ So if you want to develop on a Mac you may use the mock implementations that are
 The mock implementations are programmed in C and mimic the output of _vmstat_ and _free_.  
 They just change and generate some random values on the observed stats using /dev/urandom.  
 To use them you must first compile them using _make_ and then include the bin directory of this project
-in your $PATH to have them available when you run the stats checker.
+in your $PATH to have them available when you run the sinatra application.
 The temperature stat is only available with the latest Raspbian distro (2012-09-18) on your Raspberry Pi and will (may)
 not work if you're developing on other systems.
 
@@ -62,6 +70,8 @@ not work if you're developing on other systems.
 2. Capistrano task to reset production basic_auth username and password
 3. Show uptime
 4. Change configuration in realtime
+5. Daemonize if running in production through bin/pimon (usefull for production environments without deploying through
+capistrano)
 
 ## Copyright
 Licensed under the [WTFPL](http://en.wikipedia.org/wiki/WTFPL "Do What The Fuck You Want To Public License") license.
