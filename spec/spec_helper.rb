@@ -17,7 +17,7 @@ if ENV['COVERAGE']
   end
 end
 
-require File.join(File.dirname(__FILE__), '..', 'pimon.rb')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'pimon.rb')
 
 require 'sinatra'
 require 'rack/test'

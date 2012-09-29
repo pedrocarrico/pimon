@@ -1,11 +1,16 @@
+$: << File.dirname(__FILE__)
+
 require 'bundler/setup'
 Bundler.require(:default, ENV['RACK_ENV'])
 require 'haml'
-require "#{File.dirname(__FILE__)}/lib/pimon_config"
-require "#{File.dirname(__FILE__)}/lib/stats_collector"
+require "pimon/pimon_config"
+require "pimon/stats_collector"
 require 'sinatra'
 
 class Pimon < Sinatra::Base
+  set :public_folder, "#{File.dirname(__FILE__)}/pimon/public"
+  set :views,         "#{File.dirname(__FILE__)}/pimon/views"
+  
   def self.configure_basic_auth
     if settings.config.is_basic_auth_enabled?
       use Rack::Auth::Basic, "Restricted Area" do |username, password|
@@ -25,7 +30,6 @@ class Pimon < Sinatra::Base
       end
     end
     
-    set :public_folder, 'public'
     set :config, config
     set :stats_checker, StatsCollector.new(config, Redis.new(:path => config.redis[:socket]))
     set :timer, nil
@@ -38,7 +42,6 @@ class Pimon < Sinatra::Base
     
     config = PimonConfig.create_new('test')
     
-    set :public_folder, 'public'
     set :config, config
     set :stats_checker, StatsCollector.new(config, MockRedis.new)
     set :timer, nil

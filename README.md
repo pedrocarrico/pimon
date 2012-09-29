@@ -10,11 +10,10 @@ It uses redis lists to show the latest 6 observed statistics and also uses
 highcharts to display some nice graphs on your web browser.
 
 ## What do I need to get it to work?
-1. Install redis
+1. Install redis an configure it to run on a socket on /tmp/redis.sock
 2. bundle
-3. Use the supplied development config template in the config directory and make your own development config.yml
-4. ./dev_server.sh # run the sinatra app
-5. go to http://localhost:3000 and PROFIT!
+3. bin/pimon start # run the sinatra app
+4. go to http://localhost:3000 and PROFIT!
 
 ## Configuration
 1. basic_auth - enable or disable, configure username and password
@@ -55,6 +54,8 @@ The mock implementations are programmed in C and mimic the output of _vmstat_ an
 They just change and generate some random values on the observed stats using /dev/urandom.  
 To use them you must first compile them using _make_ and then include the bin directory of this project
 in your $PATH to have them available when you run the stats checker.
+The temperature stat is only available with the latest Raspbian distro (2012-09-18) on your Raspberry Pi and will (may)
+not work if you're developing on other systems.
 
 ## TODO
 1. Improve disk stats, have a way of having custom mount points

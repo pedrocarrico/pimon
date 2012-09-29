@@ -1,5 +1,5 @@
-require_relative 'probe'
-require_relative 'system_memory'
+require 'pimon/probe/probe'
+require 'pimon/probe/system_memory'
 
 class Probe::MemoryUsage < Probe
   

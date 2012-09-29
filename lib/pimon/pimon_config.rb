@@ -1,4 +1,4 @@
-require_relative 'hash_extensions'
+require 'pimon/hash_extensions'
 require 'yaml'
 
 class PimonConfig
@@ -50,7 +50,7 @@ class PimonConfig
   
   def initialize(environment)
     begin
-      filename = "#{File.dirname(__FILE__)}/../config/#{ environment || 'development' }.yml"
+      filename = "#{File.dirname(__FILE__)}/../../config/#{ environment || 'development' }.yml"
       @config = YAML.load_file(filename).symbolize_keys
       @config.merge!({ :environment => "#{ environment || 'development'}"})
       @config.freeze

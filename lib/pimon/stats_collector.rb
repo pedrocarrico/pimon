@@ -1,10 +1,10 @@
 require 'date'
 
-require "#{File.dirname(__FILE__)}/probe/cpu_usage"
-require "#{File.dirname(__FILE__)}/probe/disk_usage"
-require "#{File.dirname(__FILE__)}/probe/memory_usage"
-require "#{File.dirname(__FILE__)}/probe/swap_usage"
-require "#{File.dirname(__FILE__)}/probe/temperature"
+require "pimon/probe/cpu_usage"
+require "pimon/probe/disk_usage"
+require "pimon/probe/memory_usage"
+require "pimon/probe/swap_usage"
+require "pimon/probe/temperature"
 
 class StatsCollector
   def initialize(config, redis)

@@ -1,0 +1,1 @@
+/Users/pecarrico/opt/redis/src/redis-cli -s /tmp/redis.sock del pimon_mem del pimon_swap del pimon_cpu del pimon_time del pimon_disk pimon_temp

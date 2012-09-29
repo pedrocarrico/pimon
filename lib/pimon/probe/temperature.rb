@@ -1,5 +1,5 @@
 # encoding: UTF-8
-require_relative 'probe'
+require 'pimon/probe/probe'
 
 class Probe::Temperature < Probe
   def self.check

@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+action = ARGV[0]
+environment = ARGV[1]
+
+case action
+when "start"
+  require 'rack'
+  
+  puts 'Pimon is starting at http://localhost:3000'
+  config = 'config/config.ru'
+  
+  ARGV[1] ? ENV['RACK_ENV'] = environment : ENV['RACK_ENV'] = 'development'
+  
+  puts "Running in #{ENV['RACK_ENV']} mode."
+  server = Rack::Server.new(:config => config, :Port => 3000, :server => 'thin')
+  server.start
+else
+  puts "Usage: pimon start <environment>"
+end
