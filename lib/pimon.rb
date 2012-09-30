@@ -1,7 +1,7 @@
 $: << File.dirname(__FILE__)
 
-if File.file?("Gemfile")
-  require 'bundler'
+if File.file?('Gemfile')
+  require 'bundler/setup'
   Bundler.require(:default, ENV['RACK_ENV'])
 end
 require 'eventmachine'
