@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Pimon by pedrocarrico</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Pimon</h1>
+          <h2>Raspberry pi server monitor</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/pedrocarrico/pimon/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/pedrocarrico/pimon/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/pedrocarrico/pimon" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>Pimon</h1>
+
+<p><a href="http://travis-ci.org/pedrocarrico/pimon"><img src="https://secure.travis-ci.org/pedrocarrico/pimon.png" alt="Build Status"></a> <a href="https://gemnasium.com/pedrocarrico/pimon"><img src="https://gemnasium.com/pedrocarrico/pimon.png?travis" alt="Dependency Status"></a> <a href="https://codeclimate.com/github/pedrocarrico/pimon"><img src="https://codeclimate.com/badge.png" alt="Code Climate"></a></p>
+
+<p><img src="http://pedrocarrico.net/pimon.jpg" alt="Pimon" title="Pimon"></p>
+
+<h2>Description</h2>
+
+<p>Pimon is a simple server monitor designed for the Raspberry Pi.
+It uses redis lists to keep the latest observed statistics and also uses
+highcharts to display some nice charts on your web browser.</p>
+
+<h2>What do I need to get it to work?</h2>
+
+<ol>
+<li>Install redis an configure it to run on a socket on /tmp/redis.sock</li>
+<li>bundle</li>
+<li>bin/pimon start # run the sinatra app</li>
+<li>go to http://localhost:3000 and PROFIT!
+Optionally you may install it as a gem and run it, please check "Installing as a gem" further down.</li>
+</ol><h2>Configuration</h2>
+
+<ol>
+<li>basic_auth - enable or disable, configure username and password</li>
+<li>redis - location of the redis socket</li>
+<li>chart - colors for each chart</li>
+<li>queues - redis list names for the series in the charts</li>
+<li>stats - configure number of stats and time period between them</li>
+</ol><h2>Deployment</h2>
+
+<p>To deploy on your raspberry pi you just have to have ssh enabled and your keys authorized.<br>
+Then you can deploy with capistrano using:  </p>
+
+<pre><code>cap deploy:setup
+cap deploy:cold
+</code></pre>
+
+<p>This will setup your raspberry pi and deploy the application.<br>
+The username and password for the basic_auth in the production environment will be asked in the
+first deploy.
+To start and stop the application you have the usual:  </p>
+
+<pre><code>cap deploy:start
+cap deploy:stop
+</code></pre>
+
+<h2>Running tests</h2>
+
+<p>To run the coverage suite:</p>
+
+<pre><code>rake coverage:spec
+</code></pre>
+
+<p>Results will be in coverage/index.html directory.</p>
+
+<h2>Installing as a gem</h2>
+
+<pre><code>gem install pimon
+</code></pre>
+
+<p>After installation just do <em>pimon start</em> and go to http://localhost:3000 and check your stats 
+(This will only work on your Raspberry Pi and perhaps some other linux distros, check the quirks section for more info).</p>
+
+<h2>Quirks</h2>
+
+<p>Pimon uses <em>vmstat</em> and <em>free</em> to collect it's stats from the operating system and these are only
+available on operating systems that have the /proc filesystem.<br>
+So if you want to develop on a Mac you may use the mock implementations that are in the bin directory.<br>
+The mock implementations are programmed in C and mimic the output of <em>vmstat</em> and <em>free</em>.<br>
+They just change and generate some random values on the observed stats using /dev/urandom.<br>
+To use them you must first compile them using <em>make</em> and then include the bin directory of this project
+in your $PATH to have them available when you run the sinatra application.
+The temperature stat is only available with the latest Raspbian distro (2012-09-18) on your Raspberry Pi and will (may)
+not work if you're developing on other systems.</p>
+
+<h2>TODO</h2>
+
+<ol>
+<li>Improve disk stats, have a way of having custom mount points</li>
+<li>Capistrano task to reset production basic_auth username and password</li>
+<li>Show uptime</li>
+<li>Change configuration in realtime</li>
+<li>Daemonize if running in production through bin/pimon (usefull for production environments without deploying through
+capistrano)</li>
+</ol><h2>Copyright</h2>
+
+<p>Licensed under the <a href="http://en.wikipedia.org/wiki/WTFPL" title="Do What The Fuck You Want To Public License">WTFPL</a> license.</p>
+        </section>
+
+        <footer>
+          Pimon is maintained by <a href="https://github.com/pedrocarrico">pedrocarrico</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
