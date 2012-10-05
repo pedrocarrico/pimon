@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = [ 'Pedro Carriço' ]
   s.email       = [ 'pedro.carrico@gmail.com' ]
-  s.homepage    = 'https://github.com/pedrocarrico/pimon'
+  s.homepage    = 'http://pimon.pedrocarrico.net/'
   s.summary     = 'Pimon - Raspberry Pi server monitor'
   s.description = 'Pimon is a simple server monitor designed for the Raspberry Pi. It uses redis lists to keep the latest observed statistics and also uses highcharts to display some nice charts on your web browser.'
   
