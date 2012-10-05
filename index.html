@@ -46,6 +46,7 @@ highcharts to display some nice charts on your web browser.</p>
 <h2>What do I need to get it to work?</h2>
 
 <ol>
+<li>Clone this repo: git clone git://github.com/pedrocarrico/pimon.git</li>
 <li>Install redis an configure it to run on a socket on /tmp/redis.sock</li>
 <li>bundle</li>
 <li>bin/pimon start # run the sinatra app</li>
@@ -53,13 +54,56 @@ highcharts to display some nice charts on your web browser.</p>
 Optionally you may install it as a gem and run it, please check "Installing as a gem" further down.</li>
 </ol><h2>Configuration</h2>
 
+<p>Configuration is done through a YAML file, you may check some examples on the config directory.</p>
+
 <ol>
 <li>basic_auth - enable or disable, configure username and password</li>
 <li>redis - location of the redis socket</li>
 <li>chart - colors for each chart</li>
 <li>queues - redis list names for the series in the charts</li>
-<li>stats - configure number of stats and time period between them</li>
-</ol><h2>Deployment</h2>
+<li>stats_collector - configure number of stats and time period between them</li>
+</ol><h2>Installing as a gem</h2>
+
+<pre><code>gem install pimon
+</code></pre>
+
+<p>After installation just do <em>pimon start</em> and go to http://localhost:3000 and check your stats.
+If you want you may run Pimon with other options:</p>
+
+<pre><code>Usage: pimon start|stop [options]
+Options:
+    -c, --config CONFIG              YAML configuration file for pimon
+    -d, --daemonize                  Run Pimon daemonized in the background
+    -e, --environment ENVIRONMENT    Application environment (default: "development", options: "development", "production")
+    -p, --port PORT                  Port to use (default: 3000)
+    -P, --pid PIDFILE                File to store PID (default: /tmp/pimon.pid)
+</code></pre>
+
+<p>(This will only work on your Raspberry Pi and perhaps some other linux distros, check the quirks section for more info).</p>
+
+<h2>Running tests</h2>
+
+<p>To run the coverage suite:</p>
+
+<pre><code>rake coverage:spec
+</code></pre>
+
+<p>Results will be in coverage/index.html directory.</p>
+
+<h2>Quirks</h2>
+
+<p>Pimon uses <em>vmstat</em> and <em>free</em> to collect it's stats from the operating system and these are only
+available on operating systems that have the /proc filesystem.<br>
+So if you want to develop on a Mac you may use the mock implementations that are in the bin directory.<br>
+The mock implementations are programmed in C and mimic the output of <em>vmstat</em> and <em>free</em>.<br>
+They just change and generate some random values on the observed stats using /dev/urandom.<br>
+To use them you must first compile them using <em>make</em> and then include the bin directory of this project
+in your $PATH to have them available when you run the sinatra application.
+The temperature stat is only available with the latest Raspbian distro (2012-09-18) on your Raspberry Pi and will (may)
+not work if you're developing on other systems.
+Pimon only works with Ruby 1.9+, please refer to <a href="http://blog.pedrocarrico.net/post/29478085586/compiling-and-installing-ruby-on-the-raspberry-pi-using" title="Compiling and installing ruby on the raspberry pi using rbenv…">my blog</a> for a way to install Ruby 1.9.3 on your Raspberry Pi.</p>
+
+<h2>Deployment with capistrano</h2>
 
 <p>To deploy on your raspberry pi you just have to have ssh enabled and your keys authorized.<br>
 Then you can deploy with capistrano using:  </p>
@@ -77,34 +121,8 @@ To start and stop the application you have the usual:  </p>
 cap deploy:stop
 </code></pre>
 
-<h2>Running tests</h2>
-
-<p>To run the coverage suite:</p>
-
-<pre><code>rake coverage:spec
-</code></pre>
-
-<p>Results will be in coverage/index.html directory.</p>
-
-<h2>Installing as a gem</h2>
-
-<pre><code>gem install pimon
-</code></pre>
-
-<p>After installation just do <em>pimon start</em> and go to http://localhost:3000 and check your stats 
-(This will only work on your Raspberry Pi and perhaps some other linux distros, check the quirks section for more info).</p>
-
-<h2>Quirks</h2>
-
-<p>Pimon uses <em>vmstat</em> and <em>free</em> to collect it's stats from the operating system and these are only
-available on operating systems that have the /proc filesystem.<br>
-So if you want to develop on a Mac you may use the mock implementations that are in the bin directory.<br>
-The mock implementations are programmed in C and mimic the output of <em>vmstat</em> and <em>free</em>.<br>
-They just change and generate some random values on the observed stats using /dev/urandom.<br>
-To use them you must first compile them using <em>make</em> and then include the bin directory of this project
-in your $PATH to have them available when you run the sinatra application.
-The temperature stat is only available with the latest Raspbian distro (2012-09-18) on your Raspberry Pi and will (may)
-not work if you're developing on other systems.</p>
+<p>I would recommend installing as a gem and tweak your own configuration file instead of deploying with capistrano as
+this feature will probably be discontinued in the future.</p>
 
 <h2>TODO</h2>
 
@@ -113,8 +131,6 @@ not work if you're developing on other systems.</p>
 <li>Capistrano task to reset production basic_auth username and password</li>
 <li>Show uptime</li>
 <li>Change configuration in realtime</li>
-<li>Daemonize if running in production through bin/pimon (usefull for production environments without deploying through
-capistrano)</li>
 </ol><h2>Copyright</h2>
 
 <p>Licensed under the <a href="http://en.wikipedia.org/wiki/WTFPL" title="Do What The Fuck You Want To Public License">WTFPL</a> license.</p>
