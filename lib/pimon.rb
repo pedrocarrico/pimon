@@ -30,6 +30,7 @@ class Pimon < Sinatra::Base
     EventMachine::next_tick do
       settings.timer = EventMachine::add_periodic_timer(config.stats[:time_period_in_min] * 60) do
         settings.stats_checker.collect_stats
+        @o = settings.stats_checker.show_stats
       end
     end
     
@@ -56,7 +57,7 @@ class Pimon < Sinatra::Base
     last_update = settings.stats_checker.last_update
     last_modified(last_update) if ENV['RACK_ENV'] != 'development' && last_update
     
-    @o = settings.stats_checker.show_stats
+    @o ||= settings.stats_checker.show_stats
     
     haml :index
   end
