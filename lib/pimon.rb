@@ -24,8 +24,8 @@ class Pimon < Sinatra::Base
   
   configure :development, :production do
     require 'redis'
-    
-    config = PimonConfig.create_new(ENV['RACK_ENV'])
+    filename = "#{File.dirname(__FILE__)}/../config/#{ ENV['RACK_ENV'] || 'development' }.yml"
+    config = PimonConfig.create_new(ENV['PIMON_CONFIG'] || filename)
     
     EventMachine::next_tick do
       settings.timer = EventMachine::add_periodic_timer(config.stats[:time_period_in_min] * 60) do
@@ -44,7 +44,7 @@ class Pimon < Sinatra::Base
   configure :test do
     require 'mock_redis'
     
-    config = PimonConfig.create_new('test')
+    config = PimonConfig.create_new("#{File.dirname(__FILE__)}/../config/test.yml")
     
     set :config, config
     set :stats_checker, StatsCollector.new(config, MockRedis.new)

@@ -2,8 +2,8 @@ require 'pimon/hash_extensions'
 require 'yaml'
 
 class PimonConfig
-  def self.create_new(environment = nil)
-    config = self.new(environment)
+  def self.create_new(filename)
+    config = self.new(filename)
     
     return config if config.valid?
   end
@@ -18,10 +18,6 @@ class PimonConfig
   
   def chart
     @config[:chart]
-  end
-  
-  def environment
-    @config[:environment]
   end
   
   def is_basic_auth_enabled?
@@ -48,11 +44,9 @@ class PimonConfig
   
   private
   
-  def initialize(environment)
+  def initialize(filename)
     begin
-      filename = "#{File.dirname(__FILE__)}/../../config/#{ environment || 'development' }.yml"
       @config = YAML.load_file(filename).symbolize_keys
-      @config.merge!({ :environment => "#{ environment || 'development'}"})
       @config.freeze
     rescue Exception => e
       puts "Error while loading config file: #{filename}"

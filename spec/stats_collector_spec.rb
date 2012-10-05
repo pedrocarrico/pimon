@@ -5,7 +5,7 @@ require 'spec_helper'
 describe 'StatsCollector' do
   context 'when new with a valid config and redis' do
     before do
-      @stats_collector = StatsCollector.new(PimonConfig.create_new('test'), MockRedis.new)
+      @stats_collector = StatsCollector.new(PimonConfig.create_new("#{File.dirname(__FILE__)}/../config/test.yml"), MockRedis.new)
     end
     subject { @stats_collector }
     

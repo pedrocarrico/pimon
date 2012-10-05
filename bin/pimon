@@ -1,19 +1,79 @@
 #!/usr/bin/env ruby
-action = ARGV[0]
-environment = ARGV[1]
+require 'optparse'
 
-case action
-when "start"
-  require 'rack'
+options = {}
+option_parser = OptionParser.new do |opts|
+  executable_name = File.basename($PROGRAM_NAME)
+  opts.banner = "Usage: #{executable_name} start|stop [options]
+Options:
+"
+  opts.on('-c CONFIG',
+          '--config CONFIG',
+          'YAML configuration file for pimon') do |config|
+    options[:pimon_config] = config
+  end
+  
+  opts.on('-d',
+          '--daemonize',
+          'Run Pimon daemonized in the background') do
+    options[:daemonize] = true
+  end
+  
+  opts.on('-e ENVIRONMENT',
+          '--environment ENVIRONMENT',
+          'Application environment (default: "development", options: "development", "production")',
+          /^development|production$/) do |environment|
+    options[:environment] = environment
+  end
+  
+  opts.on('-p PORT',
+          '--port PORT',
+          'Port to use (default: 3000)') do |port|
+    options[:port] = port
+  end
+  
+  opts.on('-P PIDFILE',
+          '--pid PIDFILE',
+          'File to store PID (default: /tmp/pimon.pid)') do |pid_file|
+    options[:pid_file] = pid_file
+  end
+end
 
-  puts 'Pimon is starting at http://localhost:3000'
-  config = "#{File.dirname(__FILE__)}/../config/config.ru"
+begin
+  option_parser.parse!
+  if ARGV.empty?
+    puts "error: you must supply an action"
+    puts option_parser.help
+    exit 1
+  end
   
-  ARGV[1] ? ENV['RACK_ENV'] = environment : ENV['RACK_ENV'] = 'development'
+  pid_file = options[:pid_file] || '/tmp/pimon.pid'
   
-  puts "Running in #{ENV['RACK_ENV']} mode."
-  server = Rack::Server.new(:config => config, :Port => 3000, :server => 'thin')
-  server.start
-else
-  puts "Usage: pimon start <environment>"
+  case ARGV[0]
+  when 'start'
+    require 'thin'
+    port = options[:port] || 3000
+    options[:environment] ? ENV['RACK_ENV'] = options[:environment] : ENV['RACK_ENV'] = 'development'
+    config = "#{File.dirname(__FILE__)}/../config/config.ru"
+    ENV['PIMON_CONFIG'] = options[:pimon_config] if options[:pimon_config]
+    
+    puts "Pimon is starting at http://localhost:#{port}"
+    puts "Running in #{ENV['RACK_ENV']} mode."
+    puts "Using configuration file #{ENV['PIMON_CONFIG']}" if ENV['PIMON_CONFIG']
+    server = Rack::Server.new(:config => config, :daemonize => options[:daemonize], :pid => pid_file, :Port => port, :server => 'thin')
+    server.start
+  when 'stop'
+    if File.file?(pid_file)
+      pid = `cat #{pid_file}`.to_i
+      Process.kill("KILL", pid)
+      puts 'Pimon stopped...'
+    else
+      puts "Pid file not found at #{pid_file}, please supply a valid pid_file using -p or --pid"
+    end
+  else
+    STDERR.puts option_parser
+  end
+rescue OptionParser::InvalidArgument => ex
+  STDERR.puts ex.message
+  STDERR.puts option_parser
 end
