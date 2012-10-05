@@ -59,7 +59,7 @@ They just change and generate some random values on the observed stats using /de
 To use them you must first compile them using _make_ and then include the bin directory of this project
 in your $PATH to have them available when you run the sinatra application.
 The temperature stat is only available with the latest Raspbian distro (2012-09-18) on your Raspberry Pi and will (may)
-not work if you're developing on other systems.
+not work if you're developing on other systems.  
 Pimon only works with Ruby 1.9+, please refer to [my blog](http://blog.pedrocarrico.net/post/29478085586/compiling-and-installing-ruby-on-the-raspberry-pi-using "Compiling and installing ruby on the raspberry pi using rbenv…") for a way to install Ruby 1.9.3 on your Raspberry Pi.
 
 ## Deployment with capistrano
