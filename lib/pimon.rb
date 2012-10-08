@@ -24,7 +24,7 @@ class Pimon < Sinatra::Base
   
   configure :development, :production do
     require 'redis'
-    filename = "#{File.dirname(__FILE__)}/../config/#{ ENV['RACK_ENV'] || 'development' }.yml"
+    filename = "#{File.dirname(__FILE__)}/../config/default.yml"
     config = PimonConfig.create_new(ENV['PIMON_CONFIG'] || filename)
     
     EventMachine::next_tick do

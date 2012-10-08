@@ -56,10 +56,15 @@ begin
     options[:environment] ? ENV['RACK_ENV'] = options[:environment] : ENV['RACK_ENV'] = 'development'
     config = "#{File.dirname(__FILE__)}/../config/config.ru"
     ENV['PIMON_CONFIG'] = options[:pimon_config] if options[:pimon_config]
-    
     puts "Pimon is starting at http://localhost:#{port}"
     puts "Running in #{ENV['RACK_ENV']} mode."
-    puts "Using configuration file #{ENV['PIMON_CONFIG']}" if ENV['PIMON_CONFIG']
+    
+    if ENV['PIMON_CONFIG']
+      puts "Using configuration file #{ENV['PIMON_CONFIG']}"
+    else
+      puts "Using default configuration"
+    end
+    
     server = Rack::Server.new(:config => config, :daemonize => options[:daemonize], :pid => pid_file, :Port => port, :server => 'thin')
     server.start
   when 'stop'
