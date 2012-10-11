@@ -5,14 +5,17 @@ if File.file?('Gemfile')
   Bundler.require(:default, ENV['RACK_ENV'])
 end
 require 'eventmachine'
+require 'json'
 require 'haml'
 require 'pimon/pimon_config'
 require 'pimon/stats_collector'
 require 'sinatra'
+require 'sinatra-websocket'
 
 class Pimon < Sinatra::Base
   set :public_folder, "#{File.dirname(__FILE__)}/pimon/public"
   set :views,         "#{File.dirname(__FILE__)}/pimon/views"
+  set :sockets, []
   
   def self.configure_basic_auth
     if settings.config.is_basic_auth_enabled?
@@ -30,7 +33,9 @@ class Pimon < Sinatra::Base
     EventMachine::next_tick do
       settings.timer = EventMachine::add_periodic_timer(config.stats[:time_period_in_min] * 60) do
         settings.stats_checker.collect_stats
-        @o = settings.stats_checker.show_stats
+        @stats = settings.stats_checker.show_stats
+        
+        settings.sockets.each{ |s| s.send(@stats) }
       end
     end
     
@@ -54,11 +59,25 @@ class Pimon < Sinatra::Base
   end
   
   get '/' do
-    last_update = settings.stats_checker.last_update
-    last_modified(last_update) if ENV['RACK_ENV'] != 'development' && last_update
-    
-    @o ||= settings.stats_checker.show_stats
-    
-    haml :index
+    if !request.websocket?
+      last_update = settings.stats_checker.last_update
+      last_modified(last_update) if ENV['RACK_ENV'] != 'development' && last_update
+      
+      haml :index
+    else
+      request.websocket do |ws|
+        ws.onopen do
+          settings.sockets << ws
+          @stats ||= settings.stats_checker.show_stats
+          ws.send(@stats)
+        end
+        ws.onmessage do |msg|
+          puts "message received!! -> #{msg}"
+        end
+        ws.onclose do
+          settings.sockets.delete(ws)
+        end
+      end
+    end
   end
 end

@@ -1,10 +1,10 @@
 require 'date'
-
-require "pimon/probe/cpu_usage"
-require "pimon/probe/disk_usage"
-require "pimon/probe/memory_usage"
-require "pimon/probe/swap_usage"
-require "pimon/probe/temperature"
+require 'json'
+require 'pimon/probe/cpu_usage'
+require 'pimon/probe/disk_usage'
+require 'pimon/probe/memory_usage'
+require 'pimon/probe/swap_usage'
+require 'pimon/probe/temperature'
 
 class StatsCollector
   def initialize(config, redis)
@@ -45,7 +45,7 @@ class StatsCollector
        }
     end
     
-    stats
+    stats.to_json
   end
   
   private

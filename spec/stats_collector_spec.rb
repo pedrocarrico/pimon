@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 require 'spec_helper'
+require 'json'
 
 describe 'StatsCollector' do
   context 'when new with a valid config and redis' do
@@ -28,7 +29,7 @@ describe 'StatsCollector' do
                                     :swap => {:stats => [], :color => '#3CB371', :unit => '%' },
                                     :disk => {:stats => [], :color => '#CDC673', :unit => '%' },
                                     :temp => {:stats => [], :color => '#FF9B04', :unit => 'ºC' }
-                                  }
+                                  }.to_json
                      }
     
     context 'when collected some stats' do
@@ -54,7 +55,7 @@ describe 'StatsCollector' do
                                       :swap=>{ :stats => [50, 50, 50, 50, 50, 50], :color => '#3CB371', :unit => '%'},
                                       :disk=>{ :stats => [25, 25, 25, 25, 25, 25], :color => '#CDC673', :unit => '%'},
                                       :temp=>{ :stats => [40, 40, 40, 40, 40, 40], :color => '#FF9B04', :unit => 'ºC'}
-                                    }
+                                    }.to_json
                        }
     end
   end

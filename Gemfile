@@ -4,6 +4,7 @@ gem 'capistrano'
 gem 'haml'
 gem 'redis'
 gem 'sinatra', :require => 'sinatra/base'
+gem 'sinatra-websocket', '~> 0.2.0'
 gem 'thin', '~> 1.5.0'
 
 gem 'pry', :group => [:development, :test]
