@@ -19,7 +19,7 @@ after 'deploy:update_code', 'deploy:bundle_install'
 
 namespace :deploy do
   task :start, :roles => [:web, :app] do
-    run "cd #{deploy_to}/current && nohup thin -C config/thin/config.yml -R config/config.ru start"
+    run "cd #{deploy_to}/current && && PIMON_CONFIG=#{deploy_to}/current/config/production.yml nohup thin -C config/thin/config.yml -R config/config.ru start"
   end
   
   task :stop, :roles => [:web, :app] do
