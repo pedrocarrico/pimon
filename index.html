@@ -57,7 +57,6 @@ Optionally you may install it as a gem and run it, please check "Installing as a
 <p>Configuration is done through a YAML file, you may check some examples on the config directory.</p>
 
 <ol>
-<li>basic_auth - enable or disable, configure username and password</li>
 <li>redis - location of the redis socket</li>
 <li>chart - colors for each chart</li>
 <li>queues - redis list names for the series in the charts</li>
@@ -75,6 +74,7 @@ Options:
     -c, --config CONFIG              YAML configuration file for pimon
     -d, --daemonize                  Run Pimon daemonized in the background
     -e, --environment ENVIRONMENT    Application environment (default: "development", options: "development", "production")
+    -i, --interface INTERFACE        Hostname or IP address of the interface to listen on (default: "localhost")
     -p, --port PORT                  Port to use (default: 3000)
     -P, --pid PIDFILE                File to store PID (default: /tmp/pimon.pid)
 </code></pre>
@@ -100,7 +100,7 @@ They just change and generate some random values on the observed stats using /de
 To use them you must first compile them using <em>make</em> and then include the bin directory of this project
 in your $PATH to have them available when you run the sinatra application.
 The temperature stat is only available with the latest Raspbian distro (2012-09-18) on your Raspberry Pi and will (may)
-not work if you're developing on other systems.
+not work if you're developing on other systems.<br>
 Pimon only works with Ruby 1.9+, please refer to <a href="http://blog.pedrocarrico.net/post/29478085586/compiling-and-installing-ruby-on-the-raspberry-pi-using" title="Compiling and installing ruby on the raspberry pi using rbenv…">my blog</a> for a way to install Ruby 1.9.3 on your Raspberry Pi.</p>
 
 <h2>Deployment with capistrano</h2>
@@ -128,7 +128,6 @@ this feature will probably be discontinued in the future.</p>
 
 <ol>
 <li>Improve disk stats, have a way of having custom mount points</li>
-<li>Capistrano task to reset production basic_auth username and password</li>
 <li>Show uptime</li>
 <li>Change configuration in realtime</li>
 </ol><h2>Copyright</h2>
