@@ -16,15 +16,7 @@ class Pimon < Sinatra::Base
   set :public_folder, "#{File.dirname(__FILE__)}/pimon/public"
   set :views,         "#{File.dirname(__FILE__)}/pimon/views"
   set :sockets, []
-  
-  def self.configure_basic_auth
-    if settings.config.is_basic_auth_enabled?
-      use Rack::Auth::Basic, "Restricted Area" do |username, password|
-        [username, password] == config.basic_auth
-      end
-    end
-  end
-  
+
   configure :development, :production do
     require 'redis'
     filename = "#{File.dirname(__FILE__)}/../config/default.yml"
@@ -43,7 +35,6 @@ class Pimon < Sinatra::Base
     set :stats_checker, StatsCollector.new(config, Redis.new(:path => config.redis[:socket]))
     set :timer, nil
     
-    self.configure_basic_auth
   end
   
   configure :test do
@@ -55,7 +46,6 @@ class Pimon < Sinatra::Base
     set :stats_checker, StatsCollector.new(config, MockRedis.new)
     set :timer, nil
     
-    self.configure_basic_auth
   end
   
   get '/' do

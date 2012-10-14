@@ -20,11 +20,10 @@ Optionally you may install it as a gem and run it, please check "Installing as a
 ## Configuration
 Configuration is done through a YAML file, you may check some examples on the config directory.
 
-1. basic_auth - enable or disable, configure username and password
-2. redis - location of the redis socket
-3. chart - colors for each chart
-4. queues - redis list names for the series in the charts
-5. stats_collector - configure number of stats and time period between them
+1. redis - location of the redis socket
+2. chart - colors for each chart
+3. queues - redis list names for the series in the charts
+4. stats_collector - configure number of stats and time period between them
 
 ## Installing as a gem
 ```
@@ -38,6 +37,7 @@ Options:
     -c, --config CONFIG              YAML configuration file for pimon
     -d, --daemonize                  Run Pimon daemonized in the background
     -e, --environment ENVIRONMENT    Application environment (default: "development", options: "development", "production")
+    -i, --interface INTERFACE        Hostname or IP address of the interface to listen on (default: "localhost")
     -p, --port PORT                  Port to use (default: 3000)
     -P, --pid PIDFILE                File to store PID (default: /tmp/pimon.pid)
 ```
@@ -83,9 +83,8 @@ this feature will probably be discontinued in the future.
 
 ## TODO
 1. Improve disk stats, have a way of having custom mount points
-2. Capistrano task to reset production basic_auth username and password
-3. Show uptime
-4. Change configuration in realtime
+2. Show uptime
+3. Change configuration in realtime
 
 ## Copyright
 Licensed under the [WTFPL](http://en.wikipedia.org/wiki/WTFPL "Do What The Fuck You Want To Public License") license.

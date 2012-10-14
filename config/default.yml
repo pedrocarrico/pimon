@@ -1,5 +1,3 @@
-basic_auth:
-  enabled: false
 redis:
   socket: /tmp/redis.sock
 chart:

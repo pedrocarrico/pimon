@@ -26,6 +26,12 @@ Options:
     options[:environment] = environment
   end
   
+  opts.on('-i INTERFACE',
+          '--interface INTERFACE',
+          'Hostname or IP address of the interface to listen on (default: "localhost")') do |interface|
+    options[:interface] = interface
+  end
+
   opts.on('-p PORT',
           '--port PORT',
           'Port to use (default: 3000)') do |port|
@@ -53,10 +59,11 @@ begin
   when 'start'
     require 'thin'
     port = options[:port] || 3000
+    interface = options[:interface] || 'localhost'
     options[:environment] ? ENV['RACK_ENV'] = options[:environment] : ENV['RACK_ENV'] = 'development'
     config = "#{File.dirname(__FILE__)}/../config/config.ru"
     ENV['PIMON_CONFIG'] = options[:pimon_config] if options[:pimon_config]
-    puts "Pimon is starting at http://localhost:#{port}"
+    puts "Pimon is starting at http://#{interface}:#{port}"
     puts "Running in #{ENV['RACK_ENV']} mode."
     
     if ENV['PIMON_CONFIG']
@@ -65,7 +72,7 @@ begin
       puts "Using default configuration"
     end
     
-    server = Rack::Server.new(:config => config, :daemonize => options[:daemonize], :pid => pid_file, :Port => port, :server => 'thin')
+    server = Rack::Server.new(:config => config, :daemonize => options[:daemonize], :pid => pid_file, :Port => port, :server => 'thin', :Host => interface)
     server.start
   when 'stop'
     if File.file?(pid_file)
