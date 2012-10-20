@@ -39,15 +39,12 @@
 
 <h2>Description</h2>
 
-<p>Pimon is a simple server monitor designed for the Raspberry Pi.
-It uses redis lists to keep the latest observed statistics and also uses
-highcharts to display some nice charts on your web browser.</p>
+<p>Pimon is a simple server monitor designed for the Raspberry Pi.</p>
 
 <h2>What do I need to get it to work?</h2>
 
 <ol>
 <li>Clone this repo: git clone git://github.com/pedrocarrico/pimon.git</li>
-<li>Install redis an configure it to run on a socket on /tmp/redis.sock</li>
 <li>bundle</li>
 <li>bin/pimon start # run the sinatra app</li>
 <li>go to http://localhost:3000 and PROFIT!
@@ -57,9 +54,7 @@ Optionally you may install it as a gem and run it, please check "Installing as a
 <p>Configuration is done through a YAML file, you may check some examples on the config directory.</p>
 
 <ol>
-<li>redis - location of the redis socket</li>
 <li>chart - colors for each chart</li>
-<li>queues - redis list names for the series in the charts</li>
 <li>stats_collector - configure number of stats and time period between them</li>
 </ol><h2>Installing as a gem</h2>
 
