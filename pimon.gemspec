@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.email       = [ 'pedro.carrico@gmail.com' ]
   s.homepage    = 'http://pimon.pedrocarrico.net/'
   s.summary     = 'Pimon - Raspberry Pi server monitor'
-  s.description = 'Pimon is a simple server monitor designed for the Raspberry Pi. It uses redis lists to keep the latest observed statistics and also uses highcharts to display some nice charts on your web browser.'
-  s.post_install_message = 'Before running Pimon be sure to have a redis instance up and running and listening on /tmp/redis.sock'
+  s.description = 'Pimon is a simple server monitor designed for the Raspberry Pi.'
+  s.post_install_message = 'Thank you for using Pimon :-)'
   
   s.required_ruby_version = '>= 1.9'
   
@@ -21,14 +21,11 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
   
   s.add_runtime_dependency     'haml',              '~> 3.1.7'
-  s.add_runtime_dependency     'redis',             '~> 3.0.1'
   s.add_runtime_dependency     'sinatra',           '~> 1.3.2'
   s.add_runtime_dependency     'sinatra-websocket', '~> 0.2.0'
   s.add_runtime_dependency     'thin',              '~> 1.5.0'
   
   s.add_development_dependency 'rack-test',  '~> 0'
-  s.add_development_dependency 'mock_redis', '~> 0.5.0'
-  s.add_development_dependency 'rspec',      '~> 2.11.0'
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'simplecov-rcov'
   s.add_development_dependency 'timecop'

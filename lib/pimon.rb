@@ -18,12 +18,11 @@ class Pimon < Sinatra::Base
   set :sockets, []
 
   configure :development, :production do
-    require 'redis'
     filename = "#{File.dirname(__FILE__)}/../config/default.yml"
     config = PimonConfig.create_new(ENV['PIMON_CONFIG'] || filename)
     
     EventMachine::next_tick do
-      settings.timer = EventMachine::add_periodic_timer(config.stats[:time_period_in_min] * 60) do
+      settings.timer = EventMachine::add_periodic_timer(config.stats[:time_period_in_secs]) do
         settings.stats_checker.collect_stats
         @stats = settings.stats_checker.show_stats
         
@@ -32,20 +31,20 @@ class Pimon < Sinatra::Base
     end
     
     set :config, config
-    set :stats_checker, StatsCollector.new(config, Redis.new(:path => config.redis[:socket]))
+    set :stats_checker, StatsCollector.new(config)
     set :timer, nil
     
+    settings.stats_checker.collect_stats
+    @stats = settings.stats_checker.show_stats
   end
   
   configure :test do
-    require 'mock_redis'
     
     config = PimonConfig.create_new("#{File.dirname(__FILE__)}/../config/test.yml")
     
     set :config, config
-    set :stats_checker, StatsCollector.new(config, MockRedis.new)
+    set :stats_checker, StatsCollector.new(config)
     set :timer, nil
-    
   end
   
   get '/' do

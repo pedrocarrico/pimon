@@ -2,8 +2,6 @@ basic_auth:
   enabled: true
   username: pimon
   password: pimon
-redis:
-  socket: /thou/shalt/not/use/redis/on/test/environment
 chart:
   cpu:
     color: '#D2691E'
