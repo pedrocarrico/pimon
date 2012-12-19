@@ -66,8 +66,6 @@ cap deploy:cold
 ```
 
 This will setup your raspberry pi and deploy the application.  
-The username and password for the basic_auth in the production environment will be asked in the
-first deploy.
 To start and stop the application you have the usual:  
 ```
 cap deploy:start
