@@ -21,12 +21,12 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
   
   s.add_runtime_dependency     'haml',              '~> 3.1.7'
-  s.add_runtime_dependency     'sinatra',           '~> 1.3.2'
+  s.add_runtime_dependency     'sinatra',           '~> 1.3.3'
   s.add_runtime_dependency     'sinatra-websocket', '~> 0.2.0'
   s.add_runtime_dependency     'thin',              '~> 1.5.0'
   
-  s.add_development_dependency 'rack-test',  '~> 0'
-  s.add_development_dependency 'simplecov'
-  s.add_development_dependency 'simplecov-rcov'
-  s.add_development_dependency 'timecop'
+  s.add_development_dependency 'rack-test',  '~> 0.6.2'
+  s.add_development_dependency 'simplecov', '~> 0.7.1'
+  s.add_development_dependency 'simplecov-rcov', '~> 0.2.3'
+  s.add_development_dependency 'timecop', '~> 0.5.4'
 end
