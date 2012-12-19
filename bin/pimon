@@ -78,6 +78,7 @@ begin
     if File.file?(pid_file)
       pid = `cat #{pid_file}`.to_i
       Process.kill("KILL", pid)
+      File.delete(pid_file) if File.exists?(pid_file)
       puts 'Pimon stopped...'
     else
       puts "Pid file not found at #{pid_file}, please supply a valid pid_file using -p or --pid"
