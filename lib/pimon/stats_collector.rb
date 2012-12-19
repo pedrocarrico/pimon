@@ -40,16 +40,15 @@ class StatsCollector
     time = @stats.range(:time)
     
     stats = {
-              :time => { :stats => time.map { |t| (/\d\d:\d\d:\d\d/.match(t))[0] } }
-            }
+      :time => { :stats => time.map { |t| (/\d\d:\d\d:\d\d/.match(t))[0] } }
+    }
     
     @probes.each do |probe|
-      stats[probe.symbol] =
-       { 
-         :stats => @stats.range(probe.symbol).map(&:to_i),
-         :color => @config.chart[probe.symbol][:color],
-         :unit => probe.unit
-       } unless probe.symbol == :time
+      stats[probe.symbol] = {
+        :stats => @stats.range(probe.symbol),
+        :color => @config.chart[probe.symbol][:color],
+        :unit => probe.unit
+      } unless probe.symbol == :time
     end
     
     stats.to_json
