@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+$: << "#{File.dirname(__FILE__)}/../lib"
 require 'optparse'
 
 options = {}
@@ -43,6 +44,12 @@ Options:
           'File to store PID (default: /tmp/pimon.pid)') do |pid_file|
     options[:pid_file] = pid_file
   end
+  
+  opts.on('-v',
+          '--version',
+          'Display Pimon version') do |pid_file|
+    ARGV[0] = 'version'
+  end
 end
 
 begin
@@ -83,6 +90,9 @@ begin
     else
       puts "Pid file not found at #{pid_file}, please supply a valid pid_file using -p or --pid"
     end
+  when 'version'
+    require 'pimon/version'
+    puts "Pimon version is #{Pimon::VERSION}"
   else
     STDERR.puts option_parser
   end
