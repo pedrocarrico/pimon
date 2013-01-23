@@ -17,8 +17,9 @@ Optionally you may install it as a gem and run it, please check "Installing as a
 ## Configuration
 Configuration is done through a YAML file, you may check some examples on the config directory.
 
-2. chart - colors for each chart
-4. stats_collector - configure number of stats and time period between them
+1. chart - colors for each chart
+2. hostname - optional hostname to show on the chart subtitle, defaults to `hostname` if not set
+3. stats_collector - configure number of stats and time period between them
 
 ## Installing as a gem
 ```

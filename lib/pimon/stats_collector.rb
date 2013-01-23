@@ -40,7 +40,8 @@ class StatsCollector
     time = @stats.range(:time)
     
     stats = {
-      :time => { :stats => time.map { |t| (/\d\d:\d\d:\d\d/.match(t))[0] } }
+      :time => { :stats => time.map { |t| (/\d\d:\d\d:\d\d/.match(t))[0] } },
+      :hostname => @config.hostname
     }
     
     @probes.each do |probe|

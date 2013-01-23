@@ -6,6 +6,7 @@ describe 'PimonConfig' do
     
     its(:chart) { should == { :cpu => { :color => '#D2691E' }, :disk => { :color => '#CDC673' }, :mem => { :color => '#87CEFA' }, :temp => {:color=>"#FF9B04"}, :swap => { :color => '#3CB371' } } }
     its(:stats) { should == { :number_of_stats => 6, :time_period_in_min => 10 } }
+    its(:hostname) { should == 'test_hostname' }
   end
   
   context 'when created with an invalid environment' do

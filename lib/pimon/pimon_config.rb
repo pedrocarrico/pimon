@@ -14,6 +14,10 @@ class PimonConfig
     @config[:stats_collector]
   end
   
+  def hostname
+    @hostname ||= @config[:hostname].nil? ? `hostname` : @config[:hostname]
+  end
+  
   private
   
   def initialize(filename)
