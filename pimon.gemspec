@@ -4,7 +4,7 @@ require 'pimon/version'
 
 Gem::Specification.new do |s|
   s.name        = "pimon"
-  s.version     = Pimon::VERSION
+  s.version     = Pimon::VERSION.dup
   s.platform    = Gem::Platform::RUBY
   s.authors     = [ 'Pedro Carriço' ]
   s.email       = [ 'pedro.carrico@gmail.com' ]
