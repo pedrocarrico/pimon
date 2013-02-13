@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   
   s.add_runtime_dependency     'haml',              '~> 3.1.7'
   s.add_runtime_dependency     'sinatra',           '~> 1.3.3'
+  s.add_runtime_dependency     'em-websocket',      '= 0.3.8'
   s.add_runtime_dependency     'sinatra-websocket', '~> 0.2.0'
   s.add_runtime_dependency     'thin',              '~> 1.5.0'
   

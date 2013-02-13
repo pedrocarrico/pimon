@@ -2,6 +2,7 @@ source :rubygems
 
 gem 'haml', '~> 3.1.7'
 gem 'sinatra', '~> 1.3.3', :require => 'sinatra/base'
+gem 'em-websocket', '= 0.3.8'
 gem 'sinatra-websocket', '~> 0.2.0'
 gem 'thin', '~> 1.5.0'
 

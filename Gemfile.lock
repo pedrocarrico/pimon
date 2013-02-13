@@ -55,6 +55,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  em-websocket (= 0.3.8)
   haml (~> 3.1.7)
   pry
   rack-test (~> 0.6.2)
