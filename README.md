@@ -58,27 +58,11 @@ The temperature stat is only available with the latest Raspbian distro (2012-09-
 not work if you're developing on other systems.  
 Pimon only works with Ruby 1.9+, please refer to [my blog](http://blog.pedrocarrico.net/post/29478085586/compiling-and-installing-ruby-on-the-raspberry-pi-using "Compiling and installing ruby on the raspberry pi using rbenv…") for a way to install Ruby 1.9.3 on your Raspberry Pi.
 
-## Deployment with capistrano
-To deploy on your raspberry pi you just have to have ssh enabled and your keys authorized.  
-Then you can deploy with capistrano using:  
-```
-cap deploy:setup
-cap deploy:cold
-```
-
-This will setup your raspberry pi and deploy the application.  
-To start and stop the application you have the usual:  
-```
-cap deploy:start
-cap deploy:stop
-```
-I would recommend installing as a gem and tweak your own configuration file instead of deploying with capistrano as
-this feature will probably be discontinued in the future.
-
 ## TODO
 1. Improve disk stats, have a way of having custom mount points
-2. Show uptime
-3. Change configuration in realtime
+2. Change configuration in realtime
+3. Cpu frequency probe
+4. Persist stats
 
 ## Copyright
 Licensed under the [WTFPL](http://en.wikipedia.org/wiki/WTFPL "Do What The Fuck You Want To Public License") license.
