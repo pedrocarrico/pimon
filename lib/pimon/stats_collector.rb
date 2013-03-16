@@ -6,6 +6,7 @@ require 'pimon/probe/memory_usage'
 require 'pimon/probe/swap_usage'
 require 'pimon/probe/time_check'
 require 'pimon/probe/temperature'
+require 'pimon/probe/uptime'
 require 'pimon/stats'
 
 class StatsCollector
@@ -17,7 +18,8 @@ class StatsCollector
       Probe::MemoryUsage,
       Probe::SwapUsage,
       Probe::DiskUsage,
-      Probe::Temperature
+      Probe::Temperature,
+      Probe::Uptime
     ]
     @stats = Stats.new(@probes.map(&:symbol).concat([:time]))
   end
@@ -38,10 +40,12 @@ class StatsCollector
   
   def show_stats
     time = @stats.range(:time)
+    uptime = @stats.range(:uptime)
     
     stats = {
       :time => { :stats => time.map { |t| (/\d\d:\d\d:\d\d/.match(t))[0] } },
-      :hostname => @config.hostname
+      :hostname => @config.hostname,
+      :uptime => uptime
     }
     
     @probes.each do |probe|
@@ -49,7 +53,7 @@ class StatsCollector
         :stats => @stats.range(probe.symbol),
         :color => @config.chart[probe.symbol][:color],
         :unit => probe.unit
-      } unless probe.symbol == :time
+      } unless [:time, :uptime].include?(probe.symbol)
     end
     
     stats.to_json

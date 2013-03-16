@@ -16,6 +16,7 @@ describe 'StatsCollector' do
       Probe::MemoryUsage.should_receive(:check)
       Probe::SwapUsage.should_receive(:check)
       Probe::Temperature.should_receive(:check)
+      Probe::Uptime.should_receive(:check)
       
       @stats_collector.collect_stats
     end
@@ -24,6 +25,7 @@ describe 'StatsCollector' do
                         should == {
                           :time => { :stats => [] },
                           :hostname => 'test_hostname',
+                          :uptime => [],
                           :cpu => { :stats => [], :color => '#D2691E', :unit => '%' },
                           :mem => { :stats => [], :color => '#87CEFA', :unit => '%' },
                           :swap => {:stats => [], :color => '#3CB371', :unit => '%' },
@@ -41,6 +43,7 @@ describe 'StatsCollector' do
         Probe::MemoryUsage.should_receive(:check).any_number_of_times.and_return(78)
         Probe::SwapUsage.should_receive(:check).any_number_of_times.and_return(50)
         Probe::Temperature.should_receive(:check).any_number_of_times.and_return(40)
+        Probe::Uptime.should_receive(:check).any_number_of_times.and_return([1,2,3,4])
         
         7.times do
           @stats_collector.collect_stats
@@ -51,6 +54,7 @@ describe 'StatsCollector' do
                           should == {
                             :time => { :stats => ['12:00:00', '12:00:00', '12:00:00', '12:00:00', '12:00:00', '12:00:00']},
                             :hostname => 'test_hostname',
+                            :uptime => [[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]],
                             :cpu => {:stats => [50, 50, 50, 50, 50, 50], :color => '#D2691E', :unit => '%'},
                             :mem => { :stats => [78, 78, 78, 78, 78, 78], :color =>'#87CEFA', :unit => '%'},
                             :swap=>{ :stats => [50, 50, 50, 50, 50, 50], :color => '#3CB371', :unit => '%'},

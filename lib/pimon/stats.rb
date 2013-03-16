@@ -10,7 +10,7 @@ class Stats
   def index(queue, index)
     @stats[queue][index]
   end
-
+  
   def push(queue, value)
     @stats[queue].push(value)
   end
