@@ -1,5 +1,6 @@
-source :rubygems
+source 'https://rubygems.org'
 
+gem 'rake', '~> 10.0.3'
 gem 'haml', '~> 4.0.0'
 gem 'sinatra', '~> 1.4.1', :require => 'sinatra/base'
 gem 'em-websocket', '= 0.3.8'
@@ -15,4 +16,5 @@ group :test do
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'simplecov-rcov', '~> 0.2.3'
   gem 'timecop', '~> 0.6.1'
+  gem 'coveralls', require: false
 end

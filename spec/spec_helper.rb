@@ -2,16 +2,16 @@
 # Check http://richardconroy.blogspot.pt/2010/01/issues-testing-sinatra-datamapper-app.html
 ENV['RACK_ENV'] = 'test'
 
-if ENV['COVERAGE']
+if ENV['COVERAGE'] || ENV['TRAVIS']
   require 'simplecov'
+  require 'coveralls'
+  Coveralls.wear!
   require 'simplecov-rcov'
-  class SimpleCov::Formatter::MergedFormatter
-    def format(result)
-      SimpleCov::Formatter::HTMLFormatter.new.format(result)
-      SimpleCov::Formatter::RcovFormatter.new.format(result)
-    end
-  end
-  SimpleCov.formatter = SimpleCov::Formatter::MergedFormatter
+  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::RcovFormatter,
+    Coveralls::SimpleCov::Formatter
+  ]
   SimpleCov.start do
     add_filter 'spec'
   end
