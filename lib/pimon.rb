@@ -39,7 +39,6 @@ class Pimon < Sinatra::Base
   end
   
   configure :test do
-    
     config = PimonConfig.create_new("#{File.dirname(__FILE__)}/../config/test.yml")
     
     set :config, config
