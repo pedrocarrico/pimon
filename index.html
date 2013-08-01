@@ -36,17 +36,20 @@
         <span class="blc"></span><span class="trc"></span>
         </div>
         <article class="markdown-body">
-          <h1>Pimon</h1>
+          <h1>
+<a name="pimon" class="anchor" href="#pimon"><span class="octicon octicon-link"></span></a>Pimon</h1>
 
-<p><a href="http://travis-ci.org/pedrocarrico/pimon"><img src="https://secure.travis-ci.org/pedrocarrico/pimon.png" alt="Build Status"></a> <a href="https://gemnasium.com/pedrocarrico/pimon"><img src="https://gemnasium.com/pedrocarrico/pimon.png?travis" alt="Dependency Status"></a> <a href="http://badge.fury.io/rb/pimon"><img src="https://badge.fury.io/rb/pimon.png" alt="Gem Version"></a> <a href="https://codeclimate.com/github/pedrocarrico/pimon"><img src="https://codeclimate.com/badge.png" alt="Code Climate"></a></p>
+<p><a href="http://travis-ci.org/pedrocarrico/pimon"><img src="https://secure.travis-ci.org/pedrocarrico/pimon.png" alt="Build Status"></a> <a href="https://gemnasium.com/pedrocarrico/pimon"><img src="https://gemnasium.com/pedrocarrico/pimon.png?travis" alt="Dependency Status"></a> <a href="http://badge.fury.io/rb/pimon"><img src="https://badge.fury.io/rb/pimon.png" alt="Gem Version"></a> <a href="https://codeclimate.com/github/pedrocarrico/pimon"><img src="https://codeclimate.com/github/pedrocarrico/pimon.png" alt="Code Climate"></a> <a href="https://coveralls.io/r/pedrocarrico/pimon"><img src="https://coveralls.io/repos/pedrocarrico/pimon/badge.png?branch=master" alt="Coverage Status"></a></p>
 
 <p><img src="http://pedrocarrico.net/pimon.jpg" alt="Pimon" title="Pimon"></p>
 
-<h2>Description</h2>
+<h2>
+<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>Description</h2>
 
 <p>Pimon is a simple server monitor designed for the Raspberry Pi.</p>
 
-<h2>What do I need to get it to work?</h2>
+<h2>
+<a name="what-do-i-need-to-get-it-to-work" class="anchor" href="#what-do-i-need-to-get-it-to-work"><span class="octicon octicon-link"></span></a>What do I need to get it to work?</h2>
 
 <ol>
 <li>Clone this repo: git clone git://github.com/pedrocarrico/pimon.git</li>
@@ -54,7 +57,8 @@
 <li>bin/pimon start # run the sinatra app</li>
 <li>go to http://localhost:3000 and PROFIT!
 Optionally you may install it as a gem and run it, please check "Installing as a gem" further down.</li>
-</ol><h2>Configuration</h2>
+</ol><h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
 
 <p>Configuration is done through a YAML file, you may check some examples on the config directory.</p>
 
@@ -62,7 +66,8 @@ Optionally you may install it as a gem and run it, please check "Installing as a
 <li>chart - colors for each chart</li>
 <li>hostname - optional hostname to show on the chart subtitle, defaults to <code>hostname</code> if not set</li>
 <li>stats_collector - configure number of stats and time period between them</li>
-</ol><h2>Installing as a gem</h2>
+</ol><h2>
+<a name="installing-as-a-gem" class="anchor" href="#installing-as-a-gem"><span class="octicon octicon-link"></span></a>Installing as a gem</h2>
 
 <pre><code>gem install pimon
 </code></pre>
@@ -82,7 +87,8 @@ Options:
 
 <p>(This will only work on your Raspberry Pi and perhaps some other linux distros, check the quirks section for more info).</p>
 
-<h2>Running tests</h2>
+<h2>
+<a name="running-tests" class="anchor" href="#running-tests"><span class="octicon octicon-link"></span></a>Running tests</h2>
 
 <p>To run the coverage suite:</p>
 
@@ -91,7 +97,8 @@ Options:
 
 <p>Results will be in coverage/index.html directory.</p>
 
-<h2>Quirks</h2>
+<h2>
+<a name="quirks" class="anchor" href="#quirks"><span class="octicon octicon-link"></span></a>Quirks</h2>
 
 <p>Pimon uses <em>vmstat</em> and <em>free</em> to collect it's stats from the operating system and these are only
 available on operating systems that have the /proc filesystem.<br>
@@ -104,14 +111,16 @@ The temperature stat is only available with the latest Raspbian distro (2012-09-
 not work if you're developing on other systems.<br>
 Pimon only works with Ruby 1.9+, please refer to <a href="http://blog.pedrocarrico.net/post/29478085586/compiling-and-installing-ruby-on-the-raspberry-pi-using" title="Compiling and installing ruby on the raspberry pi using rbenv…">my blog</a> for a way to install Ruby 1.9.3 on your Raspberry Pi.</p>
 
-<h2>TODO</h2>
+<h2>
+<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h2>
 
 <ol>
 <li>Improve disk stats, have a way of having custom mount points</li>
 <li>Change configuration in realtime</li>
 <li>Cpu frequency probe</li>
 <li>Persist stats</li>
-</ol><h2>Copyright</h2>
+</ol><h2>
+<a name="copyright" class="anchor" href="#copyright"><span class="octicon octicon-link"></span></a>Copyright</h2>
 
 <p>Licensed under the <a href="http://en.wikipedia.org/wiki/WTFPL" title="Do What The Fuck You Want To Public License">WTFPL</a> license.</p>
         </article>
@@ -124,7 +133,7 @@ Pimon only works with Ruby 1.9+, please refer to <a href="http://blog.pedrocarri
 
       </div>
       <div class="creds">
-        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="http://twitter.com/jonrohan/">Jon Rohan</a></small>
+        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
       </div>
     </footer>
   </div>
