@@ -1,7 +1,7 @@
 rvm:
   - 1.9.3
   - 2.1.2
-script: "bundle exec rake spec"
+script: "bundle exec rspec spec"
 notifications:
     email:
         - pedro.carrico@gmail.com

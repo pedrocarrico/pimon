@@ -1,15 +1,18 @@
 require 'date'
 require 'json'
-require 'pimon/probe/cpu_usage'
-require 'pimon/probe/disk_usage'
-require 'pimon/probe/memory_usage'
-require 'pimon/probe/swap_usage'
-require 'pimon/probe/time_check'
-require 'pimon/probe/temperature'
-require 'pimon/probe/uptime'
-require 'pimon/stats'
+
+require_relative 'probe/cpu_usage'
+require_relative 'probe/disk_usage'
+require_relative 'probe/memory_usage'
+require_relative 'probe/swap_usage'
+require_relative 'probe/time_check'
+require_relative 'probe/temperature'
+require_relative 'probe/uptime'
+require_relative 'stats'
 
 class StatsCollector
+  attr_accessor :probes
+
   def initialize(config)
     @config = config
     @probes = [

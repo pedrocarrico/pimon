@@ -1,4 +1,4 @@
-require 'pimon/probe/probe'
+require_relative 'probe'
 
 class Probe::DiskUsage < Probe
   def self.check

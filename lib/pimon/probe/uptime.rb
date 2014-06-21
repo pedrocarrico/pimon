@@ -1,5 +1,6 @@
-require 'pimon/probe/probe'
 require 'sys/uptime'
+
+require_relative 'probe'
 
 class Probe::Uptime < Probe
   

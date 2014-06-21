@@ -1,5 +1,5 @@
-require 'pimon/probe/probe'
-require 'pimon/probe/system_memory'
+require_relative 'probe'
+require_relative 'system_memory'
 
 class Probe::SwapUsage < Probe
   

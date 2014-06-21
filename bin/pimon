@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-$: << "#{File.dirname(__FILE__)}/../lib"
 require 'optparse'
 
 options = {}
@@ -91,8 +90,7 @@ begin
       puts "Pid file not found at #{pid_file}, please supply a valid pid_file using -p or --pid"
     end
   when 'version'
-    require 'pimon/version'
-    puts "Pimon version is #{Pimon::VERSION}"
+    puts "Pimon version is #{Gem::Specification::load("#{File.dirname(__FILE__)}/../pimon.gemspec").version}"
   else
     STDERR.puts option_parser
   end

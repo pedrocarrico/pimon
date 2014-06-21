@@ -1,16 +1,11 @@
-$: << File.dirname(__FILE__)
-
-if File.file?('Gemfile')
-  require 'bundler/setup'
-  Bundler.require(:default, ENV['RACK_ENV'])
-end
 require 'eventmachine'
 require 'json'
 require 'haml'
-require 'pimon/pimon_config'
-require 'pimon/stats_collector'
 require 'sinatra'
 require 'sinatra-websocket'
+
+require_relative 'pimon/pimon_config'
+require_relative 'pimon/stats_collector'
 
 class Pimon < Sinatra::Base
   set :public_folder, "#{File.dirname(__FILE__)}/pimon/public"
@@ -25,7 +20,6 @@ class Pimon < Sinatra::Base
       settings.timer = EventMachine::add_periodic_timer(config.stats[:time_period_in_secs]) do
         settings.stats_checker.collect_stats
         @stats = settings.stats_checker.show_stats
-        
         settings.sockets.each{ |s| s.send(@stats) }
       end
     end
@@ -35,7 +29,6 @@ class Pimon < Sinatra::Base
     set :timer, nil
     
     settings.stats_checker.collect_stats
-    @stats = settings.stats_checker.show_stats
   end
   
   configure :test do

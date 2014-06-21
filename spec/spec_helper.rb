@@ -21,6 +21,7 @@ require File.join(File.dirname(__FILE__), '..', 'lib', 'pimon.rb')
 
 require 'sinatra'
 require 'rack/test'
+require 'timecop'
 
 # Disable the `should` syntax...as explained here:
 # http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax

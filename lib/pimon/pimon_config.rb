@@ -1,5 +1,6 @@
-require 'pimon/hash_extensions'
 require 'yaml'
+
+require_relative 'hash_extensions'
 
 class PimonConfig
   def self.create_new(filename)

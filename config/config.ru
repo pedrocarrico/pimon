@@ -1,4 +1,2 @@
-$: << "#{File.dirname(__FILE__)}/.."
-require 'lib/pimon'
-
+require_relative '../lib/pimon'
 run Pimon

@@ -1,4 +1,4 @@
-require 'pimon/probe/probe'
+require_relative 'probe'
 
 class Probe::CpuUsage < Probe
   def self.check
