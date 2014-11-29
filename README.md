@@ -1,4 +1,5 @@
 # Pimon
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/pedrocarrico/pimon?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Build Status](https://secure.travis-ci.org/pedrocarrico/pimon.png)](http://travis-ci.org/pedrocarrico/pimon) [![Dependency Status](https://gemnasium.com/pedrocarrico/pimon.png?travis)](https://gemnasium.com/pedrocarrico/pimon) [![Gem Version](https://badge.fury.io/rb/pimon.png)](http://badge.fury.io/rb/pimon) [![Code Climate](https://codeclimate.com/github/pedrocarrico/pimon.png)](https://codeclimate.com/github/pedrocarrico/pimon) [![Coverage Status](https://coveralls.io/repos/pedrocarrico/pimon/badge.png?branch=master)](https://coveralls.io/r/pedrocarrico/pimon)
 
