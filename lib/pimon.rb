@@ -23,14 +23,14 @@ class Pimon < Sinatra::Base
         settings.sockets.each{ |s| s.send(@stats) }
       end
     end
-    
+
     set :config, config
     set :stats_checker, StatsCollector.new(config)
     set :timer, nil
     
     settings.stats_checker.collect_stats
   end
-  
+
   configure :test do
     config = PimonConfig.create_new("#{File.dirname(__FILE__)}/../config/test.yml")
     
@@ -38,12 +38,12 @@ class Pimon < Sinatra::Base
     set :stats_checker, StatsCollector.new(config)
     set :timer, nil
   end
-  
+
   get '/' do
     if !request.websocket?
       last_update = settings.stats_checker.last_update
       last_modified(last_update) if ENV['RACK_ENV'] != 'development' && last_update
-      
+
       haml :index
     else
       request.websocket do |ws|

@@ -1,5 +1,4 @@
 class SystemMemory
-  
   def self.check(type)
     case type
     when :mem
@@ -9,7 +8,7 @@ class SystemMemory
     else
       raise "Undefined memory type: #{type}"
     end
-    
+
     memory = `free -o -m`.split(/\n/)[index].split(" ")
     
     return 0 if memory[1].to_i == 0

@@ -18,9 +18,9 @@ class PimonConfig
   def hostname
     @hostname ||= @config[:hostname].nil? ? `hostname` : @config[:hostname]
   end
-  
+
   private
-  
+
   def initialize(filename)
     begin
       @config = YAML.load_file(filename).symbolize_keys

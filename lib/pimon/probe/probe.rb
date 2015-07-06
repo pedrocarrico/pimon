@@ -6,7 +6,7 @@ class Probe
   def self.symbol
     raise "Not implemented"
   end
-  
+
   def self.unit
     '%'
   end

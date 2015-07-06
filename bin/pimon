@@ -12,20 +12,20 @@ Options:
           'YAML configuration file for pimon') do |config|
     options[:pimon_config] = config
   end
-  
+
   opts.on('-d',
           '--daemonize',
           'Run Pimon daemonized in the background') do
     options[:daemonize] = true
   end
-  
+
   opts.on('-e ENVIRONMENT',
           '--environment ENVIRONMENT',
           'Application environment (default: "development", options: "development", "production")',
           /^development|production$/) do |environment|
     options[:environment] = environment
   end
-  
+
   opts.on('-i INTERFACE',
           '--interface INTERFACE',
           'Hostname or IP address of the interface to listen on (default: "localhost")') do |interface|
@@ -37,13 +37,13 @@ Options:
           'Port to use (default: 3000)') do |port|
     options[:port] = port
   end
-  
+
   opts.on('-P PIDFILE',
           '--pid PIDFILE',
           'File to store PID (default: /tmp/pimon.pid)') do |pid_file|
     options[:pid_file] = pid_file
   end
-  
+
   opts.on('-v',
           '--version',
           'Display Pimon version') do |pid_file|
@@ -58,9 +58,9 @@ begin
     puts option_parser.help
     exit 1
   end
-  
+
   pid_file = options[:pid_file] || '/tmp/pimon.pid'
-  
+
   case ARGV[0]
   when 'start'
     require 'thin'
@@ -75,9 +75,9 @@ begin
     if ENV['PIMON_CONFIG']
       puts "Using configuration file #{ENV['PIMON_CONFIG']}"
     else
-      puts "Using default configuration"
+      puts 'Using default configuration'
     end
-    
+
     server = Rack::Server.new(:config => config, :daemonize => options[:daemonize], :pid => pid_file, :Port => port, :server => 'thin', :Host => interface)
     server.start
   when 'stop'
