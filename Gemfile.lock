@@ -4,7 +4,6 @@ PATH
     pimon (0.1.11)
       faye-websocket (= 0.10.0)
       haml (= 4.0.5)
-      pry (= 0.10.0)
       sinatra (= 1.4.6)
       sys-uptime (= 0.6.1)
       thin (= 1.6.2)
@@ -99,6 +98,7 @@ PLATFORMS
 DEPENDENCIES
   coveralls (= 0.8.2)
   pimon!
+  pry (>= 0.10.0)
   rack-test (= 0.6.2)
   rspec (= 3.0.0)
   simplecov (= 0.10.0)
