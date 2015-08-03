@@ -19,8 +19,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency     'haml',              '= 4.0.5'
   s.add_runtime_dependency     'sinatra',           '= 1.4.6'
-  s.add_runtime_dependency     'em-websocket',      '= 0.3.8'
-  s.add_runtime_dependency     'sinatra-websocket', '= 0.2.1'
+  s.add_runtime_dependency     'faye-websocket',    '= 0.10.0'
   s.add_runtime_dependency     'sys-uptime',        '= 0.6.1'
   s.add_runtime_dependency     'thin',              '= 1.6.2'
   s.add_runtime_dependency     'pry',               '= 0.10.0'

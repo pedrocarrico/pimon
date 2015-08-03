@@ -2,7 +2,9 @@ require 'eventmachine'
 require 'json'
 require 'haml'
 require 'sinatra'
-require 'sinatra-websocket'
+require 'faye/websocket'
+
+Faye::WebSocket.load_adapter('thin')
 
 require_relative 'pimon/pimon_config'
 require_relative 'pimon/stats_collector'
@@ -40,25 +42,25 @@ class Pimon < Sinatra::Base
   end
 
   get '/' do
-    if !request.websocket?
+    if Faye::WebSocket.websocket?(request.env)
+      ws = Faye::WebSocket.new(request.env)
+
+      ws.on(:open) do
+        settings.sockets << ws
+        @stats ||= settings.stats_checker.show_stats
+        ws.send(@stats)
+      end
+
+      ws.on(:close) do
+        settings.sockets.delete(ws)
+      end
+
+      ws.rack_response
+    else
       last_update = settings.stats_checker.last_update
       last_modified(last_update) if ENV['RACK_ENV'] != 'development' && last_update
 
       haml :index
-    else
-      request.websocket do |ws|
-        ws.onopen do
-          settings.sockets << ws
-          @stats ||= settings.stats_checker.show_stats
-          ws.send(@stats)
-        end
-        ws.onmessage do |msg|
-          puts "message received!! -> #{msg}"
-        end
-        ws.onclose do
-          settings.sockets.delete(ws)
-        end
-      end
     end
   end
 end
