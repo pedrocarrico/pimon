@@ -82,7 +82,7 @@ begin
     server.start
   when 'stop'
     if File.file?(pid_file)
-      pid = `cat #{pid_file}`.to_i
+      pid = File.read(pid_file).to_i
       Process.kill("KILL", pid)
       File.delete(pid_file) if File.exists?(pid_file)
       puts 'Pimon stopped...'
