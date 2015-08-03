@@ -78,7 +78,16 @@ begin
       puts 'Using default configuration'
     end
 
-    server = Rack::Server.new(:config => config, :daemonize => options[:daemonize], :pid => pid_file, :Port => port, :server => 'thin', :Host => interface)
+    server_options = {
+      :config => config,
+      :daemonize => options[:daemonize],
+      :pid => pid_file,
+      :Port => port,
+      :server => 'thin',
+      :Host => interface
+    }
+
+    server = Rack::Server.new(server_options)
     server.start
   when 'stop'
     if File.file?(pid_file)
