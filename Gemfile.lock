@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    pimon (0.1.11)
+    pimon (0.2.0)
       faye-websocket (= 0.10.0)
-      haml (= 4.0.6)
+      haml (= 4.0.7)
       sinatra (= 1.4.6)
       sys-uptime (= 0.6.2)
       thin (= 1.6.3)
@@ -11,6 +11,9 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    ast (2.1.0)
+    astrolabe (1.3.1)
+      parser (~> 2.2)
     coderay (1.1.0)
     coveralls (0.8.2)
       json (~> 1.8)
@@ -23,12 +26,12 @@ GEM
     docile (1.1.5)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
-    eventmachine (1.0.7)
+    eventmachine (1.0.8)
     faye-websocket (0.10.0)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
     ffi (1.9.10)
-    haml (4.0.6)
+    haml (4.0.7)
       tilt
     http-cookie (1.0.2)
       domain_name (~> 0.5)
@@ -36,6 +39,9 @@ GEM
     method_source (0.8.2)
     mime-types (2.6.1)
     netrc (0.10.3)
+    parser (2.2.2.6)
+      ast (>= 1.1, < 3.0)
+    powerpack (0.1.1)
     pry (0.10.0)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -45,6 +51,7 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    rainbow (2.0.0)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
@@ -61,6 +68,13 @@ GEM
     rspec-mocks (3.0.2)
       rspec-support (~> 3.0.0)
     rspec-support (3.0.2)
+    rubocop (0.33.0)
+      astrolabe (~> 1.3)
+      parser (>= 2.2.2.5, < 3.0)
+      powerpack (~> 0.1)
+      rainbow (>= 1.99.1, < 3.0)
+      ruby-progressbar (~> 1.4)
+    ruby-progressbar (1.7.5)
     simplecov (0.10.0)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -98,9 +112,10 @@ PLATFORMS
 DEPENDENCIES
   coveralls (= 0.8.2)
   pimon!
-  pry (>= 0.10.0)
+  pry (= 0.10.0)
   rack-test (= 0.6.2)
   rspec (= 3.0.0)
+  rubocop (= 0.33.0)
   simplecov (= 0.10.0)
   simplecov-rcov (= 0.2.3)
   timecop (= 0.7.1)

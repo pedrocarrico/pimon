@@ -46,7 +46,7 @@ Options:
 
   opts.on('-v',
           '--version',
-          'Display Pimon version') do |pid_file|
+          'Display Pimon version') do |_|
     ARGV[0] = 'version'
   end
 end
@@ -54,7 +54,7 @@ end
 begin
   option_parser.parse!
   if ARGV.empty?
-    puts "error: you must supply an action"
+    puts 'error: you must supply an action'
     puts option_parser.help
     exit 1
   end
@@ -71,7 +71,7 @@ begin
     ENV['PIMON_CONFIG'] = options[:pimon_config] if options[:pimon_config]
     puts "Pimon is starting at http://#{interface}:#{port}"
     puts "Running in #{ENV['RACK_ENV']} mode."
-    
+
     if ENV['PIMON_CONFIG']
       puts "Using configuration file #{ENV['PIMON_CONFIG']}"
     else
@@ -79,12 +79,12 @@ begin
     end
 
     server_options = {
-      :config => config,
-      :daemonize => options[:daemonize],
-      :pid => pid_file,
-      :Port => port,
-      :server => 'thin',
-      :Host => interface
+      config: config,
+      daemonize: options[:daemonize],
+      pid: pid_file,
+      Port: port,
+      server: 'thin',
+      Host: interface
     }
 
     server = Rack::Server.new(server_options)
@@ -92,14 +92,14 @@ begin
   when 'stop'
     if File.file?(pid_file)
       pid = File.read(pid_file).to_i
-      Process.kill("KILL", pid)
-      File.delete(pid_file) if File.exists?(pid_file)
+      Process.kill('KILL', pid)
+      File.delete(pid_file) if File.exist?(pid_file)
       puts 'Pimon stopped...'
     else
       puts "Pid file not found at #{pid_file}, please supply a valid pid_file using -p or --pid"
     end
   when 'version'
-    puts "Pimon version is #{Gem::Specification::load("#{File.dirname(__FILE__)}/../pimon.gemspec").version}"
+    puts "Pimon version is #{Gem::Specification.load("#{File.dirname(__FILE__)}/../pimon.gemspec").version}"
   else
     STDERR.puts option_parser
   end

@@ -1,16 +1,14 @@
-# encoding: UTF-8
-require_relative 'probe'
+module Pimon
+  module Probe
+    class Temperature
+      def self.check(date = Time.now)
+        value = `cat /sys/class/thermal/thermal_zone0/temp`[0..1].to_i
+        OpenStruct.new(date: date.strftime('%Y-%m-%d %H:%M:%S'), probe_name: 'temp', value: value, unit: unit)
+      end
 
-class Probe::Temperature < Probe
-  def self.check
-    `cat /sys/class/thermal/thermal_zone0/temp`[0..1].to_i
-  end
-  
-  def self.symbol
-    :temp
-  end
-  
-  def self.unit
-    'ºC'
+      def self.unit
+        'ºC'
+      end
+    end
   end
 end

@@ -1,12 +1,19 @@
-require_relative 'probe'
-require_relative 'system_memory'
+module Pimon
+  module Probe
+    class SwapUsage
+      def self.check(date = Time.now)
+        options = {
+          date: date.strftime('%Y-%m-%d %H:%M:%S'),
+          probe_name: 'swap',
+          value: SystemMemory.check(:swap),
+          unit: unit
+        }
+        OpenStruct.new(options)
+      end
 
-class Probe::SwapUsage < Probe
-  def self.check
-    SystemMemory.check(:swap)
-  end
-
-  def self.symbol
-    :swap
+      def self.unit
+        '%'
+      end
+    end
   end
 end

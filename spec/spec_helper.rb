@@ -17,11 +17,11 @@ if ENV['COVERAGE'] || ENV['TRAVIS']
   end
 end
 
-require File.join(File.dirname(__FILE__), '..', 'lib', 'pimon.rb')
-
 require 'sinatra'
 require 'rack/test'
 require 'timecop'
+
+require File.join(File.dirname(__FILE__), '..', 'lib/pimon.rb')
 
 # Disable the `should` syntax...as explained here:
 # http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax
@@ -29,5 +29,11 @@ RSpec.configure do |config|
   config.order = :random
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+end
+
+module Pimon
+  module Test
+    CONFIG = "#{File.dirname(__FILE__)}/../config/test.yml".freeze
   end
 end

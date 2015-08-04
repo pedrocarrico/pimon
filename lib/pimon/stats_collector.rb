@@ -1,78 +1,75 @@
 require 'date'
 require 'json'
 
-require_relative 'probe/cpu_usage'
-require_relative 'probe/disk_usage'
-require_relative 'probe/memory_usage'
-require_relative 'probe/swap_usage'
-require_relative 'probe/time_check'
-require_relative 'probe/temperature'
-require_relative 'probe/uptime'
-require_relative 'stats'
+require 'pimon/probe'
 
-class StatsCollector
-  attr_accessor :probes
+module Pimon
+  class StatsCollector
+    attr_accessor :config
+    attr_accessor :last_update
+    attr_accessor :probes
+    attr_accessor :probe_threads
+    attr_reader :stats
 
-  def initialize(config)
-    @config = config
-    @probes = [
-      Probe::TimeCheck,
-      Probe::CpuUsage,
-      Probe::MemoryUsage,
-      Probe::SwapUsage,
-      Probe::DiskUsage,
-      Probe::Temperature,
-      Probe::Uptime
+    CHART_PROBES = [
+      Pimon::Probe::CpuUsage,
+      Pimon::Probe::MemoryUsage,
+      Pimon::Probe::SwapUsage,
+      Pimon::Probe::DiskUsage,
+      Pimon::Probe::Temperature
     ]
-    @stats = Stats.new(@probes.map(&:symbol).concat([:time]))
-  end
-  
-  def collect_stats
-    pop_old_stats
-    
-    @probes.each do |probe|
-      @stats.push(probe.symbol, probe.check)
+
+    SINGLE_PROBES = [
+      Pimon::Probe::Uptime,
+      Pimon::Probe::CpuFreq
+    ]
+
+    def initialize(config)
+      @config = config
+      @probes = {
+        charts: CHART_PROBES,
+        single: SINGLE_PROBES
+      }
+      @stats = { colors: config.colors, charts: {}, single: {}, hostname: config.hostname }
+      @probe_threads = []
+      @collection_mutex = Mutex.new
     end
-  end
-  
-  def last_update
-    time = @stats.index(:time, @config.stats[:number_of_stats] - 1)
-    
-    DateTime.parse(time) if time
-  end
-  
-  def show_stats
-    time = @stats.range(:time)
-    uptime = @stats.range(:uptime)
-    
-    stats = {
-      :time => { :stats => time.map { |t| (/\d\d:\d\d:\d\d/.match(t))[0] } },
-      :hostname => @config.hostname,
-      :uptime => uptime
-    }
-    
-    @probes.each do |probe|
-      stats[probe.symbol] = {
-        :stats => @stats.range(probe.symbol),
-        :color => @config.chart[probe.symbol][:color],
-        :unit => probe.unit
-      } unless [:time, :uptime].include?(probe.symbol)
+
+    def collect_stats
+      @collection_mutex.synchronize do
+        self.last_update = Time.now
+
+        [:charts, :single].each do |stats_type|
+          probes[stats_type].each do |probe|
+            self.probe_threads = []
+            probe_threads << Thread.new do
+              sample = probe.check(last_update)
+              stats[stats_type][sample.probe_name] = sample
+            end
+          end
+        end
+      end
     end
-    
-    stats.to_json
-  end
-  
-  private
-   
-  def pop_all_queues
-    @probes.each { |probe| @stats.shift(probe.symbol) }
-  end
-  
-  def pop_old_stats
-    queue_size = @stats.range(:time).length
-    
-    if queue_size >= @config.stats[:number_of_stats]
-      (queue_size - @config.stats[:number_of_stats] + 1).times { pop_all_queues }
+
+    def show_stats
+      wait_for_stats_collection { stats }
+    end
+
+    def charts
+      wait_for_stats_collection { stats[:charts].keys }
+    end
+
+    def single_stats
+      wait_for_stats_collection { stats[:single].keys }
+    end
+
+    private
+
+    def wait_for_stats_collection
+      @collection_mutex.synchronize do
+        probe_threads.each(&:join)
+        yield if block_given?
+      end
     end
   end
 end
