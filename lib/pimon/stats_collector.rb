@@ -12,6 +12,7 @@ require_relative 'stats'
 
 class StatsCollector
   attr_accessor :probes
+  attr_accessor :last_update
 
   def initialize(config)
     @config = config
@@ -30,15 +31,10 @@ class StatsCollector
   def collect_stats
     pop_old_stats
     
+    last_update = Time.now
     @probes.each do |probe|
       @stats.push(probe.symbol, probe.check)
     end
-  end
-  
-  def last_update
-    time = @stats.index(:time, @config.stats[:number_of_stats] - 1)
-    
-    DateTime.parse(time) if time
   end
   
   def show_stats
