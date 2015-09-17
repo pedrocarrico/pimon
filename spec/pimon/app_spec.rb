@@ -7,17 +7,20 @@ set :raise_errors, true
 set :logging, false
 
 def app
-  Pimon
+  Pimon::App
 end
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods
 end
 
-describe "Pimon" do
-  it "should be success" do
-    
-    get '/'
-    expect(last_response).to be_ok
+describe Pimon::App do
+  describe 'GET /' do
+    before { get '/' }
+
+    it 'renders the index page' do
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('test_hostname')
+    end
   end
 end

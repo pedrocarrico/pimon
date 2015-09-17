@@ -1,0 +1,13 @@
+.hostname {
+  text-align: center;
+}
+
+.single_stat {
+  padding-left: 20px;
+}
+
+.chart {
+  display: inline-block;
+  min-width: 25%;
+  padding: 0 20px;
+}

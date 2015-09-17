@@ -1,12 +1,22 @@
 %html
   %header
     %title Pimon
-    %script{ :src => '//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery-1.8.0.min.js' }
-    %script{ :src => '//cdnjs.cloudflare.com/ajax/libs/highcharts/2.3.1/highcharts.js' }
-    %script{ :src => '//cdnjs.cloudflare.com/ajax/libs/piecon/0.2/piecon.js' }
+    -#%link{ :href => '/favicon.ico', :rel => :icon, :type => :"image/x-icon" }
+    %link{ :href => '/normalize.css', :rel => :stylesheet, :type => :"text/css" }
+    %link{ :href => '/style.css', :rel => :stylesheet, :type => :"text/css" }
+    %script{ :src => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery-1.8.0.min.js' }
+    %script{ :src => '/piecon.js' }
+    %script{ :src => 'https://cdnjs.cloudflare.com/ajax/libs/smoothie/1.27.0/smoothie.min.js' }
     %script{ :src => '/index.js' }
+
   %body
-    #chart
-    #uptime
-      Uptime: 
-      %strong.up
+    %h1.hostname= hostname
+    - single_stats.each do |stat_name|
+      .single_stat{ :id => stat_name }
+        %strong= "#{stat_name.upcase}: "
+        %span.stat
+
+    - charts.each do |chart_name|
+      .chart
+        %h2= chart_name.upcase
+        %canvas{ :id => "#{chart_name}_chart" }

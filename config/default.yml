@@ -1,14 +1,8 @@
-chart:
-  cpu:
-    color: '#D2691E'
-  disk:
-    color: '#CDC673'
-  mem:
-    color: '#87CEFA'
-  temp:
-    color: '#FF9B04'
-  swap:
-    color: '#3CB371'
+colors:
+  cpu:  '#D2691E'
+  disk: '#CDC673'
+  mem:  '#87CEFA'
+  temp: '#FF9B04'
+  swap: '#3CB371'
 stats_collector:
-  number_of_stats: 6
-  time_period_in_secs: 30
+  time_period_in_secs: 10
